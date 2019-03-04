@@ -21,7 +21,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
+import com.google.firebase.messaging.FirebaseMessaging;
 
+import ipvc.estg.wheretogo.Classes.MyUser;
+import ipvc.estg.wheretogo.Classes.TipoUser;
 import ipvc.estg.wheretogo.R;
 
 public class LoginActivity extends AppCompatActivity {
@@ -29,18 +34,21 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     EditText email, password;
     Button btnLogin;
+    DatabaseReference refUsers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        //DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("message");
+        refUsers = FirebaseDatabase.getInstance().getReference("users");
         mAuth = FirebaseAuth.getInstance();
+        //FirebaseAuth.getInstance().signOut();
 
         email = findViewById(R.id.input_username);
         password = findViewById(R.id.input_password);
         btnLogin = findViewById(R.id.btnLogin);
+
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -48,11 +56,9 @@ public class LoginActivity extends AppCompatActivity {
                 if (email.getText().length() != 0 && password.getText().length() != 0) {
                     loginUser(email.getText().toString(), password.getText().toString());
                 }
+
             }
         });
-
-
-        //myRef.setValue("Hello, World!");
 
         //createAccount("fjrs.ipvc@gmail.com", "123456789");
 
@@ -61,8 +67,10 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        if (mAuth.getCurrentUser() != null){
+        if (mAuth.getCurrentUser() != null) {
             // User já está logado
+            FirebaseUser u = mAuth.getCurrentUser();
+            Toast.makeText(this, u.getEmail(), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -73,7 +81,14 @@ public class LoginActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
                     Toast.makeText(LoginActivity.this, "Login efetuado com sucesso", Toast.LENGTH_SHORT).show();
-                    FirebaseUser user = mAuth.getCurrentUser();
+                    final FirebaseUser user = mAuth.getCurrentUser();
+                    FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                            Log.d("TOKEN", "TOKEN: " + task.getResult().getToken());
+                            refUsers.child(user.getUid()).child("token").setValue(task.getResult().getToken());
+                        }
+                    });
                 } else {
                     Toast.makeText(LoginActivity.this, "Authentication failed.",
                             Toast.LENGTH_SHORT).show();
@@ -82,26 +97,22 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    /*public void createAccount(String email, String password) {
+    public void createAccount(final String email, String password) {
 
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
                             Log.d("TAG", "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            Toast.makeText(LoginActivity.this, user.getEmail().toString(), Toast.LENGTH_SHORT).show();
+                            refUsers.child(user.getUid()).setValue(new MyUser(user.getUid(), "Admin", email, "968345678", TipoUser.Administrador, ""));
                         } else {
-                            // If sign in fails, display a message to the user.
                             Log.w("TAG", "createUserWithEmail:failure", task.getException());
                             Toast.makeText(LoginActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                         }
-
-                        // ...
                     }
                 });
-    }*/
+    }
 }
