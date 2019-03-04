@@ -17,6 +17,9 @@ public class MyUser {
         this.token = token;
     }
 
+    public MyUser() {
+    }
+
     public String getId() {
         return id;
     }

@@ -20,6 +20,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
@@ -35,6 +36,7 @@ public class LoginActivity extends AppCompatActivity {
     EditText email, password;
     Button btnLogin;
     DatabaseReference refUsers;
+    MyUser userLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,8 +82,11 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
+
                     Toast.makeText(LoginActivity.this, "Login efetuado com sucesso", Toast.LENGTH_SHORT).show();
+
                     final FirebaseUser user = mAuth.getCurrentUser();
+
                     FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
                         @Override
                         public void onComplete(@NonNull Task<InstanceIdResult> task) {
@@ -89,6 +94,14 @@ public class LoginActivity extends AppCompatActivity {
                             refUsers.child(user.getUid()).child("token").setValue(task.getResult().getToken());
                         }
                     });
+
+                    Query query = FirebaseDatabase.getInstance().getReference("users")
+                            .orderByChild("id")
+                            .equalTo(user.getUid());
+
+                    query.addListenerForSingleValueEvent(valueEventListener);
+
+
                 } else {
                     Toast.makeText(LoginActivity.this, "Authentication failed.",
                             Toast.LENGTH_SHORT).show();
@@ -115,4 +128,26 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 });
     }
+
+    ValueEventListener valueEventListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(DataSnapshot dataSnapshot) {
+            if(dataSnapshot.exists()){
+                for (DataSnapshot d : dataSnapshot.getChildren()){
+                    userLogin = d.getValue(MyUser.class);
+                }
+
+                if (userLogin.getTipo() == TipoUser.Administrador){
+                    Toast.makeText(LoginActivity.this, "Administrador", Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(LoginActivity.this, "Técnico", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+
+        }
+    };
 }
