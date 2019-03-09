@@ -22,7 +22,7 @@ public class TecMapActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 switch (menuItem.getItemId()){
                     case R.id.navigation_home :
-                        Toast.makeText(TecMapActivity.this, "Navigation", Toast.LENGTH_SHORT).show();break;
+                        Toast.makeText(TecMapActivity.this, "Navigation 1", Toast.LENGTH_SHORT).show();break;
                 }
                 return true;
             }
