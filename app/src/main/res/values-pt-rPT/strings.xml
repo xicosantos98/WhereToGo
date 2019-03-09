@@ -3,4 +3,8 @@
     <string name="app_name">WhereToGo</string>
     <string name="str_username">E-mail</string>
     <string name="str_password">Password</string>
+    <string name="str_new_appointment">Novo</string>
+    <string name="str_map">Mapa</string>
+    <string name="str_logout">Sair</string>
+    <string name="str_list_appointments">Serviços</string>
 </resources>

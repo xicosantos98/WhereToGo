@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:name=".Classes.App"
@@ -16,6 +17,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".Tecnico.TecMapActivity"></activity>
+
+        <activity android:name=".Admin.AdminMapActivity"></activity>
 
         <service android:name=".Classes.MyFirebaseMessagingService">
             <intent-filter>
@@ -37,6 +40,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <meta-data
+        android:name="com.google.android.geo.API_KEY"
+        android:value="AIzaSyCln6hwMxBWFYAAJK3v7KPPftpiEQN_XKQ" />
     </application>
 
 </manifest>

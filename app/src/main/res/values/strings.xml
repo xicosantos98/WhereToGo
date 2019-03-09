@@ -6,4 +6,11 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+    <string name="str_new_appointment">New</string>
+    <string name="str_map">Map</string>
+    <string name="str_logout">Logout</string>
+    <string name="str_list_appointments">Appointments</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

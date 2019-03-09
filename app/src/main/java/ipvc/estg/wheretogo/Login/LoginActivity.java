@@ -29,6 +29,7 @@ import com.google.firebase.iid.InstanceIdResult;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 
+import ipvc.estg.wheretogo.Admin.AdminMapActivity;
 import ipvc.estg.wheretogo.Classes.Estado;
 import ipvc.estg.wheretogo.Classes.Localizacao;
 import ipvc.estg.wheretogo.Classes.MyUser;
@@ -95,7 +96,7 @@ public class LoginActivity extends AppCompatActivity {
 
             query.addListenerForSingleValueEvent(valueEventListener);
 
-            Intent intent = new Intent(this, TecMapActivity.class);
+            Intent intent = new Intent(this, AdminMapActivity.class);
             startActivity(intent);
         }
     }

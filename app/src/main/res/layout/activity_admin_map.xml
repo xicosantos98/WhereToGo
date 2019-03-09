@@ -7,17 +7,23 @@
     android:layout_height="match_parent"
     tools:context=".Tecnico.TecMapActivity">
 
-    <!-- Main content -->
+    <FrameLayout
+        android:id="@+id/fragmentContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/botto_navigation_admin">
+
+    </FrameLayout>
 
     <android.support.design.widget.BottomNavigationView
-        android:id="@+id/botto_navigation"
+        android:id="@+id/botto_navigation_admin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         app:itemBackground="@color/colorPrimary"
         app:itemIconTint="@drawable/bottom_navigation_colors"
         app:itemTextColor="@drawable/bottom_navigation_colors"
-        app:menu="@menu/navigation">
+        app:menu="@menu/navigation_admin">
 
     </android.support.design.widget.BottomNavigationView>
 
