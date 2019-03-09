@@ -2,31 +2,33 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/colorBackground"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Login.LoginActivity">
 
     <ImageView
         android:id="@+id/logo"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="100dp"
-        android:src="@drawable/logo"
-        android:layout_centerHorizontal="true"/>
+        android:layout_marginBottom="50dp"
+        android:src="@drawable/distance" />
 
     <android.support.design.widget.TextInputLayout
-    android:id="@+id/username"
-    android:layout_width="300dp"
-    android:layout_height="wrap_content"
-    android:layout_below="@id/logo"
-    android:layout_centerHorizontal="true">
+        android:id="@+id/username"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/logo"
+        android:layout_centerHorizontal="true">
 
         <EditText
             android:id="@+id/input_username"
-            android:inputType="textEmailAddress"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:hint="@string/str_username" />
+            android:hint="@string/str_username"
+            android:inputType="textEmailAddress" />
 
     </android.support.design.widget.TextInputLayout>
 
@@ -39,20 +41,20 @@
 
         <EditText
             android:id="@+id/input_password"
-            android:inputType="textPassword"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:hint="@string/str_password" />
+            android:hint="@string/str_password"
+            android:inputType="textPassword" />
 
     </android.support.design.widget.TextInputLayout>
 
     <Button
         android:id="@+id/btnLogin"
-        android:layout_below="@id/password"
-        android:layout_marginTop="30dp"
-        android:layout_centerHorizontal="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Login"/>
+        android:layout_below="@id/password"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:text="Login" />
 
 </RelativeLayout>

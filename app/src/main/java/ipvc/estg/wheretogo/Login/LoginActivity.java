@@ -1,5 +1,7 @@
 package ipvc.estg.wheretogo.Login;
 
+import android.content.Intent;
+import android.icu.util.DateInterval;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -26,16 +28,24 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.google.firebase.messaging.FirebaseMessaging;
 
+
+import ipvc.estg.wheretogo.Classes.Estado;
+import ipvc.estg.wheretogo.Classes.Localizacao;
 import ipvc.estg.wheretogo.Classes.MyUser;
+import ipvc.estg.wheretogo.Classes.ServiceLocation;
+import ipvc.estg.wheretogo.Classes.Servico;
+import ipvc.estg.wheretogo.Classes.TipoServico;
 import ipvc.estg.wheretogo.Classes.TipoUser;
+import ipvc.estg.wheretogo.Classes.Utils;
 import ipvc.estg.wheretogo.R;
+import ipvc.estg.wheretogo.Tecnico.TecMapActivity;
 
 public class LoginActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     EditText email, password;
     Button btnLogin;
-    DatabaseReference refUsers;
+    DatabaseReference refUsers, refLocalizacao, refTipo, refServico;
     MyUser userLogin;
 
     @Override
@@ -44,6 +54,10 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         refUsers = FirebaseDatabase.getInstance().getReference("users");
+        refLocalizacao = FirebaseDatabase.getInstance().getReference("localizacao");
+        refTipo = FirebaseDatabase.getInstance().getReference("tipo_servico");
+        refServico = FirebaseDatabase.getInstance().getReference("servico");
+
         mAuth = FirebaseAuth.getInstance();
         //FirebaseAuth.getInstance().signOut();
 
@@ -62,6 +76,8 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+
+
         //createAccount("fjrs.ipvc@gmail.com", "123456789");
 
     }
@@ -73,6 +89,14 @@ public class LoginActivity extends AppCompatActivity {
             // User já está logado
             FirebaseUser u = mAuth.getCurrentUser();
             Toast.makeText(this, u.getEmail(), Toast.LENGTH_SHORT).show();
+            Query query = FirebaseDatabase.getInstance().getReference("users")
+                    .orderByChild("id")
+                    .equalTo(u.getUid());
+
+            query.addListenerForSingleValueEvent(valueEventListener);
+
+            Intent intent = new Intent(this, TecMapActivity.class);
+            startActivity(intent);
         }
     }
 
