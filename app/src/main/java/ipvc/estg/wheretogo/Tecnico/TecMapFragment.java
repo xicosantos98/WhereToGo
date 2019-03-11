@@ -1,4 +1,5 @@
-package ipvc.estg.wheretogo.Admin;
+package ipvc.estg.wheretogo.Tecnico;
+
 
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
@@ -17,17 +18,21 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import ipvc.estg.wheretogo.R;
 
-public class MapFragment extends Fragment {
+/**
+ * A simple {@link Fragment} subclass.
+ */
+public class TecMapFragment extends Fragment {
+
 
     MapView mapView;
     GoogleMap map;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)          {
-        View v = inflater.inflate(R.layout.fragment_map, container, false);
+        View v = inflater.inflate(R.layout.fragment_tec_map, container, false);
 
         // Gets the MapView from the XML layout and creates it
-        mapView = (MapView) v.findViewById(R.id.mapView);
+        mapView = (MapView) v.findViewById(R.id.mapViewTec);
         mapView.onCreate(savedInstanceState);
         mapView.onResume();
 

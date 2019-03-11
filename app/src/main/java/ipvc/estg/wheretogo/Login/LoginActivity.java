@@ -1,23 +1,22 @@
 package ipvc.estg.wheretogo.Login;
 
 import android.content.Intent;
-import android.icu.util.DateInterval;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -26,18 +25,10 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
-import com.google.firebase.messaging.FirebaseMessaging;
-
 
 import ipvc.estg.wheretogo.Admin.AdminMapActivity;
-import ipvc.estg.wheretogo.Classes.Estado;
-import ipvc.estg.wheretogo.Classes.Localizacao;
 import ipvc.estg.wheretogo.Classes.MyUser;
-import ipvc.estg.wheretogo.Classes.ServiceLocation;
-import ipvc.estg.wheretogo.Classes.Servico;
-import ipvc.estg.wheretogo.Classes.TipoServico;
 import ipvc.estg.wheretogo.Classes.TipoUser;
-import ipvc.estg.wheretogo.Classes.Utils;
 import ipvc.estg.wheretogo.R;
 import ipvc.estg.wheretogo.Tecnico.TecMapActivity;
 
@@ -45,6 +36,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     EditText email, password;
+    ProgressBar progressBar;
     Button btnLogin;
     DatabaseReference refUsers, refLocalizacao, refTipo, refServico;
     MyUser userLogin;
@@ -65,6 +57,11 @@ public class LoginActivity extends AppCompatActivity {
         email = findViewById(R.id.input_username);
         password = findViewById(R.id.input_password);
         btnLogin = findViewById(R.id.btnLogin);
+        progressBar = findViewById(R.id.progress_bar);
+
+        email.setText("franciscosantos@ipvc.pt");
+        password.setText("12345678");
+
 
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
@@ -78,8 +75,7 @@ public class LoginActivity extends AppCompatActivity {
         });
 
 
-
-        //createAccount("fjrs.ipvc@gmail.com", "123456789");
+        //createAccount("franciscosantos@ipvc.pt", "12345678");
 
     }
 
@@ -95,21 +91,22 @@ public class LoginActivity extends AppCompatActivity {
                     .equalTo(u.getUid());
 
             query.addListenerForSingleValueEvent(valueEventListener);
-
-            Intent intent = new Intent(this, AdminMapActivity.class);
-            startActivity(intent);
         }
     }
 
 
     public void loginUser(String email, String password) {
+
+        btnLogin.setVisibility(View.INVISIBLE);
+        progressBar.setVisibility(View.VISIBLE);
+
         mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
 
                     Toast.makeText(LoginActivity.this, "Login efetuado com sucesso", Toast.LENGTH_SHORT).show();
-
+                    progressBar.setVisibility(View.INVISIBLE);
                     final FirebaseUser user = mAuth.getCurrentUser();
 
                     FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
@@ -128,8 +125,10 @@ public class LoginActivity extends AppCompatActivity {
 
 
                 } else {
-                    Toast.makeText(LoginActivity.this, "Authentication failed.",
+                    Toast.makeText(LoginActivity.this, "Credenciais incorretas",
                             Toast.LENGTH_SHORT).show();
+                    btnLogin.setVisibility(View.VISIBLE);
+                    progressBar.setVisibility(View.INVISIBLE);
                 }
             }
         });
@@ -144,7 +143,7 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             Log.d("TAG", "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            refUsers.child(user.getUid()).setValue(new MyUser(user.getUid(), "Admin", email, "968345678", TipoUser.Administrador, ""));
+                            refUsers.child(user.getUid()).setValue(new MyUser(user.getUid(), "José Silva", email, "968345678", TipoUser.Tecnico, ""));
                         } else {
                             Log.w("TAG", "createUserWithEmail:failure", task.getException());
                             Toast.makeText(LoginActivity.this, "Authentication failed.",
@@ -163,9 +162,9 @@ public class LoginActivity extends AppCompatActivity {
                 }
 
                 if (userLogin.getTipo() == TipoUser.Administrador){
-                    Toast.makeText(LoginActivity.this, "Administrador", Toast.LENGTH_SHORT).show();
+                    redirect("Administrador");
                 }else{
-                    Toast.makeText(LoginActivity.this, "Técnico", Toast.LENGTH_SHORT).show();
+                    redirect("Técnico");
                 }
             }
         }
@@ -175,4 +174,15 @@ public class LoginActivity extends AppCompatActivity {
 
         }
     };
+
+    public void redirect(String tipo){
+        Intent intent;
+        if(tipo.equals("Administrador")){
+            intent = new Intent(this, AdminMapActivity.class);
+        }else{
+            intent = new Intent(this, TecMapActivity.class);
+        }
+        intent.putExtra("USER", userLogin.getNome());
+        startActivity(intent);
+    }
 }

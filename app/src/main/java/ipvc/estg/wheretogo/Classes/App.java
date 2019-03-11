@@ -14,7 +14,7 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         FirebaseDatabase.getInstance().setPersistenceEnabled(true);
-        createNotificationChannel();
+        //createNotificationChannel();
     }
 
     private void createNotificationChannel() {
