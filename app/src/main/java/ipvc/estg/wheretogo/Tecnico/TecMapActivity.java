@@ -6,7 +6,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationItemView;
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.FirebaseDatabase;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,7 +20,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
-import ipvc.estg.wheretogo.Admin.MapFragment;
 import ipvc.estg.wheretogo.Login.LoginActivity;
 import ipvc.estg.wheretogo.R;
 
@@ -35,10 +33,8 @@ public class TecMapActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tec_map);
 
-
-
         Intent i = getIntent();
-        getSupportActionBar().setTitle(" Técnico: " + i.getStringExtra("USER"));
+        getSupportActionBar().setTitle(" " + getString(R.string.str_technician) + ": " + i.getStringExtra("USER"));
         getSupportActionBar().setLogo(R.drawable.ic_account_circle_black_24dp);
         getSupportActionBar().setDisplayUseLogoEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -122,4 +118,10 @@ public class TecMapActivity extends AppCompatActivity {
         }
         return false;
     }
+
+    public String getUser(){
+        Intent i = getIntent();
+        return  i.getStringExtra("USER");
+    }
+
 }

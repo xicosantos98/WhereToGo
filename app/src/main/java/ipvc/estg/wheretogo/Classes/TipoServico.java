@@ -11,9 +11,13 @@ public class TipoServico {
         this.tempoDuracao = tempoDuracao;
     }
 
+    public TipoServico() {
+    }
+
     public String getId() {
         return id;
     }
+
 
     public String getNome() {
         return nome;

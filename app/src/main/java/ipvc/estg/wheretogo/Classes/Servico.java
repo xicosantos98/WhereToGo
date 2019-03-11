@@ -1,7 +1,10 @@
 package ipvc.estg.wheretogo.Classes;
 
-import java.time.LocalDate;
-import java.util.Date;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 
 public class Servico {
     private String id;
@@ -11,11 +14,12 @@ public class Servico {
     private ServiceLocation coordenadas;
     private TipoServico tipo;
     private String contato;
+    private String data;
     private String horaPrevista;
     private boolean atrasado;
-    private MyUser tecnico;
+    private String tecnico;
 
-    public Servico(String id, String morada, String descricao, Estado estado, ServiceLocation coordenadas, TipoServico tipo, String contato, String horaPrevista, boolean atrasado, MyUser tecnico) {
+    public Servico(String id, String morada, String descricao, Estado estado, ServiceLocation coordenadas, TipoServico tipo, String contato, String data, String horaPrevista, boolean atrasado, String tecnico) {
         this.id = id;
         this.morada = morada;
         this.descricao = descricao;
@@ -23,9 +27,13 @@ public class Servico {
         this.coordenadas = coordenadas;
         this.tipo = tipo;
         this.contato = contato;
+        this.data = data;
         this.horaPrevista = horaPrevista;
         this.atrasado = atrasado;
         this.tecnico = tecnico;
+    }
+
+    public Servico() {
     }
 
     public String getId() {
@@ -56,6 +64,8 @@ public class Servico {
         return contato;
     }
 
+    public String getData() {return data;}
+
     public String getHoraPrevista() {
         return horaPrevista;
     }
@@ -64,7 +74,10 @@ public class Servico {
         return atrasado;
     }
 
-    public MyUser getTecnico() {
+    public String getTecnico() {
         return tecnico;
     }
+
+
+
 }

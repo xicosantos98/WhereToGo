@@ -9,6 +9,9 @@ public class ServiceLocation {
         this.longitude = longitude;
     }
 
+    public ServiceLocation() {
+    }
+
     public double getLatitude() {
         return latitude;
     }
