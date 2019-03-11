@@ -7,4 +7,9 @@
     <string name="str_map">Mapa</string>
     <string name="str_logout">Sair</string>
     <string name="str_list_appointments">Serviços</string>
+    <string name="api_key1">AIzaSyCln6hwMxBWFYAAJK3v7KPPftpiEQN_XKQ</string>
+    <string name="api_key_routes">AIzaSyAOEfIHh-VYr8V73LmBo_ubiQrOeMdgPaE</string>
+    <string name="str_technician">Técnico</string>
+    <string name="str_logout_message">Deseja terminar sessão ?</string>
+    <string name="str_cancel">Cancelar</string>
 </resources>

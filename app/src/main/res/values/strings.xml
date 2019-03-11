@@ -13,4 +13,9 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="api_key1">AIzaSyCln6hwMxBWFYAAJK3v7KPPftpiEQN_XKQ</string>
+    <string name="api_key_routes">AIzaSyAOEfIHh-VYr8V73LmBo_ubiQrOeMdgPaE</string>
+    <string name="str_technician">Technician</string>
+    <string name="str_logout_message">Do you wish to logout ?</string>
+    <string name="str_cancel">Cancel</string>
 </resources>

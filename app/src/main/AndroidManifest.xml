@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ipvc.estg.wheretogo">
+
     <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
@@ -16,9 +17,13 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Tecnico.TecMapActivity"></activity>
+        <service
+            android:name=".Classes.Service"
+            android:enabled="true"
+            android:exported="true" />
 
-        <activity android:name=".Admin.AdminMapActivity"></activity>
+        <activity android:name=".Tecnico.TecMapActivity" />
+        <activity android:name=".Admin.AdminMapActivity" />
 
         <service android:name=".Classes.MyFirebaseMessagingService">
             <intent-filter>
@@ -42,8 +47,14 @@
         </activity>
 
         <meta-data
-        android:name="com.google.android.geo.API_KEY"
-        android:value="AIzaSyCln6hwMxBWFYAAJK3v7KPPftpiEQN_XKQ" />
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/api_key1" />
+
+        <receiver android:name=".Classes.NotificationReceiver">
+            <intent-filter android:priority="999">
+                <action android:name="com.example.cancel" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

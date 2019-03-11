@@ -26,8 +26,18 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 
+import org.joda.time.LocalDateTime;
+import org.joda.time.LocalTime;
+
+import java.sql.Time;
+import java.util.Date;
+
 import ipvc.estg.wheretogo.Admin.AdminMapActivity;
+import ipvc.estg.wheretogo.Classes.Estado;
 import ipvc.estg.wheretogo.Classes.MyUser;
+import ipvc.estg.wheretogo.Classes.ServiceLocation;
+import ipvc.estg.wheretogo.Classes.Servico;
+import ipvc.estg.wheretogo.Classes.TipoServico;
 import ipvc.estg.wheretogo.Classes.TipoUser;
 import ipvc.estg.wheretogo.R;
 import ipvc.estg.wheretogo.Tecnico.TecMapActivity;
@@ -52,7 +62,7 @@ public class LoginActivity extends AppCompatActivity {
         refServico = FirebaseDatabase.getInstance().getReference("servico");
 
         mAuth = FirebaseAuth.getInstance();
-        //FirebaseAuth.getInstance().signOut();
+        FirebaseAuth.getInstance().signOut();
 
         email = findViewById(R.id.input_username);
         password = findViewById(R.id.input_password);
@@ -91,6 +101,7 @@ public class LoginActivity extends AppCompatActivity {
                     .equalTo(u.getUid());
 
             query.addListenerForSingleValueEvent(valueEventListener);
+
         }
     }
 
@@ -160,6 +171,23 @@ public class LoginActivity extends AppCompatActivity {
                 for (DataSnapshot d : dataSnapshot.getChildren()){
                     userLogin = d.getValue(MyUser.class);
                 }
+
+                /*LocalDateTime l = new LocalDateTime();
+                LocalDateTime date = l.plusDays(1);
+                l.toLocalDate().toString();
+                l.toLocalTime().toString();
+
+                LocalTime local = new LocalTime("10:05:23.917");
+                local.toString();
+
+                String key = refServico.push().getKey();
+                String keyTipo = refTipo.push().getKey();
+
+                TipoServico t = new TipoServico(keyTipo, "Mudança router", 120);
+
+
+                refServico.child(key).setValue(new Servico(key,"Rua Manuel Lima Bezerra", "Mudança router", Estado.Pendente,
+                        new ServiceLocation(41.703834,-8.825820),t, "932567890",date.toLocalDate().toString(), date.toLocalTime().toString() , false, userLogin.getNome()));*/
 
                 if (userLogin.getTipo() == TipoUser.Administrador){
                     redirect("Administrador");
