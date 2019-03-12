@@ -1,3 +1,21 @@
 <resources>
     <string name="app_name">WhereToGo</string>
+    <string name="str_username">E-mail</string>
+    <string name="str_password">Password</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="str_new_appointment">New</string>
+    <string name="str_map">Map</string>
+    <string name="str_logout">Logout</string>
+    <string name="str_list_appointments">Appointments</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="api_key1">AIzaSyCln6hwMxBWFYAAJK3v7KPPftpiEQN_XKQ</string>
+    <string name="api_key_routes">AIzaSyAOEfIHh-VYr8V73LmBo_ubiQrOeMdgPaE</string>
+    <string name="str_technician">Technician</string>
+    <string name="str_logout_message">Do you wish to logout ?</string>
+    <string name="str_cancel">Cancel</string>
 </resources>
