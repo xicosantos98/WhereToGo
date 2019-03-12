@@ -55,7 +55,6 @@ public class AppointmentList extends Fragment {
             servicoList.add(s);
         }
 
-        servicoList.
 
         RecyclerView recycler = (RecyclerView) v.findViewById(R.id.rv_appointments);
 
