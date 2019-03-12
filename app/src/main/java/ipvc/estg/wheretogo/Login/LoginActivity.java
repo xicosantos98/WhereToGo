@@ -62,7 +62,7 @@ public class LoginActivity extends AppCompatActivity {
         refServico = FirebaseDatabase.getInstance().getReference("servico");
 
         mAuth = FirebaseAuth.getInstance();
-        FirebaseAuth.getInstance().signOut();
+        //FirebaseAuth.getInstance().signOut();
 
         email = findViewById(R.id.input_username);
         password = findViewById(R.id.input_password);

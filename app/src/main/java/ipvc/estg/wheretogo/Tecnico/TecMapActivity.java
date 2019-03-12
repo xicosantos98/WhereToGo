@@ -45,11 +45,6 @@ public class TecMapActivity extends AppCompatActivity {
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-<<<<<<< HEAD
-                switch (menuItem.getItemId()){
-                    case R.id.navigation_home :
-                        Toast.makeText(TecMapActivity.this, "Navigation 123", Toast.LENGTH_SHORT).show();break;
-=======
                 switch (menuItem.getItemId()) {
                     case R.id.navigation_ListAppoint_tec:
                         Toast.makeText(TecMapActivity.this, "Servicos", Toast.LENGTH_SHORT).show();
@@ -66,7 +61,6 @@ public class TecMapActivity extends AppCompatActivity {
                     return loadFragment(fragment);
                 }else{
                     return true;
->>>>>>> 713ffb857be14fecaf4a6835d8bf3b3bfc119711
                 }
             }
         });

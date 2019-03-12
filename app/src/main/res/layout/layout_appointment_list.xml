@@ -2,59 +2,118 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
-
-    <android.support.v7.widget.CardView
+    <Space
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="20dp" />
+    
+    <com.google.android.material.card.MaterialCardView
+        style="@style/Widget.MaterialComponents.CardView"
+        android:layout_width="match_parent"
+        android:layout_height="175dp"
         android:layout_marginLeft="@dimen/mtrl_card_spacing"
         android:layout_marginTop="@dimen/mtrl_card_spacing"
         android:layout_marginRight="@dimen/mtrl_card_spacing"
-        style="@style/Widget.MaterialComponents.CardView"
-        android:minHeight="200dp">
-
+        app:cardBackgroundColor="#e4e9ed"
+        app:cardCornerRadius="10dp"
+        app:contentPadding="10dp">
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+
+        <TextView
+            android:id="@+id/service_card_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true" />
+        <TextView
+            android:id="@+id/service_card_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/service_card_address"
+            android:layout_marginBottom="15dp"
+            />
+
+
+        <TextView
+            android:id="@+id/service_card_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/service_card_date"
+            android:layout_alignParentLeft="true"
+            android:layout_toLeftOf="@id/service_card_linearright"
+            android:paddingRight="10dp"
+            android:layout_above="@id/service_card_edit"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:id="@+id/service_card_linearright"
+
+            android:orientation="vertical">
             <ImageView
                 android:id="@+id/service_card_image"
-                android:layout_width="120dp"
-                android:layout_height="120dp"
-                android:layout_alignParentRight="true" />
-
-            <TextView
-                android:id="@+id/service_card_address"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Morada"
-                android:layout_alignParentLeft="true" />
-
-            <TextView
-                android:id="@+id/service_card_description"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Descrição"
-                android:layout_below="@id/service_card_address" />
-
-            <TextView
-                android:id="@+id/service_card_status"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="status"
-                android:layout_below="@id/service_card_technician"
-                android:layout_alignParentRight="true"/>
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:src="@drawable/ic_assignment_ind_black_24dp"
+                android:layout_gravity="center" />
 
             <TextView
                 android:id="@+id/service_card_technician"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="tecnico"
+                android:layout_gravity="center"
                 android:layout_below="@id/service_card_image"
+                />
+
+            <TextView
+                android:id="@+id/service_card_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="status"
+                android:backgroundTint="@color/colorPrimary"
+                android:layout_gravity="center"
+                android:layout_below="@id/service_card_technician"
                 android:layout_alignParentRight="true"/>
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_fiber_manual_record_black_24dp"
+                android:tint="@color/colorPrimary"
+                android:layout_gravity="center"/>
+        </LinearLayout>
+
+
+        <Button
+            android:id="@+id/service_card_realocate"
+            style="@style/Widget.MaterialComponents.Button.TextButton.Dialog"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_alignParentBottom="true"
+            android:includeFontPadding="false"
+            android:textAllCaps="false"
+            android:text="Realocar"/>
+
+        <Button
+            android:id="@+id/service_card_edit"
+            style="@style/Widget.MaterialComponents.Button.TextButton.Dialog"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginLeft="10dp"
+            android:layout_alignParentBottom="true"
+            android:textAllCaps="false"
+            android:includeFontPadding="false"
+            android:layout_toRightOf="@id/service_card_realocate"
+            android:text="Editar" />
         </RelativeLayout>
 
-    </android.support.v7.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
+
 
 </LinearLayout>
