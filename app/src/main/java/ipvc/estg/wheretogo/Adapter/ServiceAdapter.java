@@ -1,9 +1,12 @@
 package ipvc.estg.wheretogo.Adapter;
 
 import android.app.Activity;
+import android.content.Context;
+import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -14,6 +17,7 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import ipvc.estg.wheretogo.Admin.AppointmentList;
 import ipvc.estg.wheretogo.Classes.ILoadMore;
 import ipvc.estg.wheretogo.Classes.Servico;
 import ipvc.estg.wheretogo.R;
@@ -29,6 +33,7 @@ class LoadingViewHolder extends RecyclerView.ViewHolder{
 
 class ItemViewHolder extends RecyclerView.ViewHolder{
     public TextView morada, data, descricao, tecnico, estado;
+    public ImageView color_estado;
 
     public ItemViewHolder (View itemView){
         super(itemView);
@@ -37,6 +42,7 @@ class ItemViewHolder extends RecyclerView.ViewHolder{
         descricao = itemView.findViewById(R.id.service_card_description);
         tecnico = itemView.findViewById(R.id.service_card_technician);
         estado = itemView.findViewById(R.id.service_card_status);
+        color_estado = itemView.findViewById(R.id.estado_color);
     }
 }
 public class ServiceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
@@ -50,9 +56,13 @@ public class ServiceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     int visibleThreshold=20;
     int lastVisibleServico, totalServicoCount;
 
+    Activity a;
+
     public ServiceAdapter(RecyclerView recyclerView, final Activity activity, List<Servico> servicos) {
         this.activity = activity;
         this.servicos = servicos;
+
+        a = activity;
 
 
         final LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
@@ -106,12 +116,26 @@ public class ServiceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public void onBindViewHolder( RecyclerView.ViewHolder holder, int position) {
         if(holder instanceof ItemViewHolder){
             Servico servico = servicos.get(position);
+            String estado = servicos.get(position).getEstado().toString();
             ItemViewHolder viewHolder = (ItemViewHolder) holder;
             viewHolder.estado.setText(servicos.get(position).getEstado().toString());
             viewHolder.tecnico.setText(servicos.get(position).getTecnico());
             viewHolder.data.setText(servicos.get(position).getData()+" "+ servicos.get(position).getHoraPrevista());
             viewHolder.descricao.setText(servicos.get(position).getDescricao());
             viewHolder.morada.setText(servicos.get(position).getMorada());
+
+            switch (estado){
+                case "Pendente":
+                    viewHolder.color_estado.setColorFilter(a.getColor(R.color.orange)); break;
+                case "Cancelado":
+                    viewHolder.color_estado.setColorFilter(a.getColor(R.color.red)); break;
+                case "Concluido":
+                    viewHolder.color_estado.setColorFilter(a.getColor(R.color.green)); break;
+                case "Rejeitado":
+                    viewHolder.color_estado.setColorFilter(a.getColor(R.color.grey)); break;
+                default:
+                    viewHolder.color_estado.setColorFilter(a.getColor(R.color.colorPrimary)); break;
+            }
         }else if(holder instanceof LoadingViewHolder){
             LoadingViewHolder loadingViewHolder = (LoadingViewHolder) holder;
             loadingViewHolder.progressBar.setIndeterminate(true);

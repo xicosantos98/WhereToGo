@@ -56,6 +56,9 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+
+        FirebaseDatabase.getInstance().getReference().keepSynced(true);
+
         refUsers = FirebaseDatabase.getInstance().getReference("users");
         refLocalizacao = FirebaseDatabase.getInstance().getReference("localizacao");
         refTipo = FirebaseDatabase.getInstance().getReference("tipo_servico");

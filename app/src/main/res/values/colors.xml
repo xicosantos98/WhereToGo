@@ -5,4 +5,8 @@
     <color name="colorAccent">#1081E0</color>
     <color name="colorNotification">#2574a9</color>
     <color name="colorBackground">#F9F9F9</color>
+    <color name="orange">#f89406</color>
+    <color name="red">#d91e18</color>
+    <color name="green">#2ecc71</color>
+    <color name="grey">#abb7b7</color>
 </resources>
