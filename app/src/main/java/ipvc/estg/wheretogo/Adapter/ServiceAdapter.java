@@ -73,7 +73,6 @@ public class ServiceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 totalServicoCount = linearLayoutManager.getItemCount();
                 lastVisibleServico = linearLayoutManager.findLastVisibleItemPosition();
                 if(!isLoading && totalServicoCount <= (lastVisibleServico+visibleThreshold)){
-                    Toast.makeText(activity, "ULTIMO: " + lastVisibleServico, Toast.LENGTH_SHORT).show();
                     if(loadMore!=null)
                         loadMore.onLoadMore();
                 }

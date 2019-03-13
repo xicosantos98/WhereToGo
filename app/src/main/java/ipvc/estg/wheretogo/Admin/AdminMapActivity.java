@@ -16,7 +16,13 @@ public class AdminMapActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_map);
 
+        getSupportActionBar().setTitle(" Administrador");
+        getSupportActionBar().setLogo(R.drawable.ic_businessman);
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.botto_navigation_admin);
+        bottomNavigationView.setSelectedItemId(R.id.navigation_ListAppoint);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {

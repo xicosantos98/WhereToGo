@@ -26,10 +26,13 @@ import com.google.firebase.database.ValueEventListener;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 
+import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -48,6 +51,7 @@ import ipvc.estg.wheretogo.R;
 public class AppointmentList extends Fragment {
 
     List<Servico> servicoList = new ArrayList<>();
+    List<Servico> listaAtualizar = new ArrayList<>();
     Servico startingServico = null;
 
     ServiceAdapter serviceAdapter;
@@ -69,35 +73,8 @@ public class AppointmentList extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v =inflater.inflate(R.layout.fragment_appointment_list, container, false);
+
         ref = FirebaseDatabase.getInstance().getReference("servico");
-        ref.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                Toast.makeText(getActivity(), dataSnapshot.toString(), Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-        //ref.keepSynced(true);
-
 
 
         recycler = (RecyclerView) v.findViewById(R.id.rv_appointments);
@@ -131,6 +108,7 @@ public class AppointmentList extends Fragment {
 
 
 
+
         return v;
     }
 
@@ -142,53 +120,91 @@ public class AppointmentList extends Fragment {
         String date = df.format("dd-MM-yyyy", l.toDate()).toString();
 
 
-        Query query = ref
-                .orderByChild("data");
-                /*.limitToFirst(11)
-                .startAt(date, "-L_oTA6G0v6IRON7wPKr")
-                .endAt(date)*/
-                //query.keepSynced(true);
-        query.addValueEventListener(new ValueEventListener() {
+        Query query = ref.orderByChild("data").equalTo(date);
+
+        query.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                Toast.makeText(getActivity(), "Adicionei", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                Toast.makeText(getActivity(), "Alteração", Toast.LENGTH_SHORT).show();
+                final Servico editServico = dataSnapshot.getValue(Servico.class);
+
+
+                for (int i=0; i < servicoList.size(); i++){
+                    if(servicoList.get(i).getId().equals(editServico.getId())){
+                        servicoList.set(i, editServico);
+                    }
+                }
+
+                serviceAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Toast.makeText(getActivity(), "Atualizei", Toast.LENGTH_SHORT).show();
+
+                Toast.makeText(getActivity(), "Criei lista", Toast.LENGTH_SHORT).show();
+                //servicoList.clear();
+
                 if(dataSnapshot.exists()){
                     for(DataSnapshot d: dataSnapshot.getChildren()){
                         Servico s = d.getValue(Servico.class);
                         servicoList.add(s);
                     }
-                    startingServico = servicoList.get(servicoList.size()-1);
-                    servicoList.remove(servicoList.size()-1);
 
-                    serviceAdapter = new ServiceAdapter(recycler, getActivity(), servicoList);
+                    listaAtualizar.addAll(servicoList.subList(0,10));
+
+                    serviceAdapter = new ServiceAdapter(recycler, getActivity(), listaAtualizar);
 
                     recycler.setAdapter(serviceAdapter);
 
-                    /*serviceAdapter.setLoadMore(new ILoadMore() {
+                    serviceAdapter.setLoadMore(new ILoadMore() {
                         @Override
                         public void onLoadMore() {
-                            if(servicoList.size()<=30){
-                                servicoList.add(null);
-                                serviceAdapter.notifyItemInserted(servicoList.size()-1);
+                            if(listaAtualizar.size() < servicoList.size()){
+                                listaAtualizar.add(null);
+                                serviceAdapter.notifyItemInserted(listaAtualizar.size()-1);
                                 new Handler().postDelayed(new Runnable() {
                                     @Override
                                     public void run() {
-                                        servicoList.remove(servicoList.size()-1);
-                                        serviceAdapter.notifyItemRemoved(servicoList.size());
-                                        int index = servicoList.size();
+                                        listaAtualizar.remove(listaAtualizar.size()-1);
+                                        serviceAdapter.notifyItemRemoved(listaAtualizar.size());
+                                        int index = listaAtualizar.size();
                                         int end = index +3;
-                                        for (int i=index; i < end; i++){
-                                            servicoList.add(s);
+                                        for (int i=index; i < end && i < servicoList.size(); i++){
+                                            listaAtualizar.add(servicoList.get(i));
                                         }
                                         serviceAdapter.notifyDataSetChanged();
                                         serviceAdapter.setLoading();
                                     }
-                                }, 5000);
+                                }, 2000);
                             }else {
                                 Toast.makeText(getActivity(), "Data Loaded", Toast.LENGTH_SHORT).show();
                             }
                         }
-                    });*/
+                    });
+
                 }
             }
 
