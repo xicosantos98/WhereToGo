@@ -104,11 +104,6 @@ public class AppointmentList extends Fragment {
         FirebaseDatabase.getInstance().getReference("servico").child(id).setValue(s);*/
 
 
-
-
-
-
-
         return v;
     }
 
@@ -121,43 +116,6 @@ public class AppointmentList extends Fragment {
 
 
         Query query = ref.orderByChild("data").equalTo(date);
-
-        query.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                Toast.makeText(getActivity(), "Adicionei", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                Toast.makeText(getActivity(), "Alteração", Toast.LENGTH_SHORT).show();
-                final Servico editServico = dataSnapshot.getValue(Servico.class);
-
-
-                for (int i=0; i < servicoList.size(); i++){
-                    if(servicoList.get(i).getId().equals(editServico.getId())){
-                        servicoList.set(i, editServico);
-                    }
-                }
-
-                serviceAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
 
 
         query.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -211,6 +169,45 @@ public class AppointmentList extends Fragment {
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Log.d("ERRO AAAAAAAAAA", databaseError.getMessage());
+            }
+        });
+
+        query.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                Toast.makeText(getActivity(), "Adicionei", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                Toast.makeText(getActivity(), "Alteração", Toast.LENGTH_SHORT).show();
+                final Servico editServico = dataSnapshot.getValue(Servico.class);
+
+                if(listaAtualizar.size() != 0){
+                    for (int i=0; i < listaAtualizar.size(); i++){
+                        if(listaAtualizar.get(i).getId().equals(editServico.getId())){
+                            listaAtualizar.set(i, editServico);
+                            serviceAdapter.notifyDataSetChanged();
+                            return;
+                        }
+                    }
+
+                }
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
             }
         });
     }
