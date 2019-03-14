@@ -5,14 +5,10 @@
     android:layout_height="match_parent"
     android:paddingBottom="15dp"
     tools:context=".Admin.AppointmentList">
-    <ScrollView
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_appointments"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <androidx.recyclerview.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="10dp"
-            android:id="@+id/rv_appointments">
-        </androidx.recyclerview.widget.RecyclerView>
-    </ScrollView>
+        android:layout_height="match_parent"
+        android:padding="10dp"></androidx.recyclerview.widget.RecyclerView>
 </RelativeLayout>

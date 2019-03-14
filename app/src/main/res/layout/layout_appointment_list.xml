@@ -1,120 +1,200 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:descendantFocusability="beforeDescendants"
+    android:layout_marginRight="2dp"
     android:orientation="vertical">
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="20dp" />
-    
+
     <com.google.android.material.card.MaterialCardView
         style="@style/Widget.MaterialComponents.CardView"
         android:layout_width="match_parent"
-        android:layout_height="175dp"
-        android:layout_marginLeft="@dimen/mtrl_card_spacing"
-        android:layout_marginTop="@dimen/mtrl_card_spacing"
-        android:layout_marginRight="@dimen/mtrl_card_spacing"
-        app:cardBackgroundColor="#e4e9ed"
-        app:cardCornerRadius="10dp"
+        android:layout_height="195dp"
+        android:layout_marginRight="2dp"
+        app:cardBackgroundColor="#ffffff"
+        app:cardCornerRadius="5dp"
+        app:cardElevation="10dp"
+        app:cardPreventCornerOverlap="false"
+        app:cardUseCompatPadding="true"
         app:contentPadding="10dp">
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-
-        <TextView
-            android:id="@+id/service_card_address"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true" />
-        <TextView
-            android:id="@+id/service_card_date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/service_card_address"
-            android:layout_marginBottom="15dp"
-            />
-
-
-        <TextView
-            android:id="@+id/service_card_description"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/service_card_date"
-            android:layout_alignParentLeft="true"
-            android:layout_toLeftOf="@id/service_card_linearright"
-            android:paddingRight="10dp"
-            android:layout_above="@id/service_card_edit"/>
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
-            android:id="@+id/service_card_linearright"
+            android:orientation="horizontal">
 
-            android:orientation="vertical">
-            <ImageView
-                android:id="@+id/service_card_image"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:src="@drawable/ic_assignment_ind_black_24dp"
-                android:layout_gravity="center" />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/service_card_technician"
-                android:layout_width="wrap_content"
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="3">
+
+
+                    <ImageView
+                        android:id="@+id/address_icon"
+                        android:layout_width="12dp"
+                        android:layout_height="12dp"
+                        android:layout_marginTop="3.5dp"
+                        android:src="@drawable/ic_pin" />
+
+                    <TextView
+                        android:id="@+id/service_card_address"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_toRightOf="@id/address_icon"
+                        android:text="Rua Manuel Bino" />
+
+                    <ImageView
+                        android:id="@+id/icon_date"
+                        android:layout_width="12dp"
+                        android:layout_height="12dp"
+                        android:layout_below="@id/service_card_address"
+                        android:layout_marginTop="3.5dp"
+                        android:src="@drawable/ic_calendar" />
+
+                    <TextView
+                        android:id="@+id/service_card_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/service_card_address"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginBottom="15dp"
+                        android:layout_toRightOf="@id/icon_date"
+                        android:text="14-04-2019" />
+
+                    <ImageView
+                        android:id="@+id/icon_desc"
+                        android:layout_width="12dp"
+                        android:layout_height="12dp"
+                        android:layout_below="@id/service_card_date"
+                        android:layout_marginTop="3.5dp"
+                        android:src="@drawable/ic_clipboards" />
+
+                    <TextView
+                        android:id="@+id/service_card_description"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/service_card_date"
+                        android:layout_marginLeft="10dp"
+                        android:layout_toRightOf="@id/icon_desc"
+                        android:paddingRight="10dp"
+                        android:text="skahjdkshjkdhasjkdhasjkhdjkashdjkashjkdashaj" />
+
+
+                </RelativeLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/service_card_realocate"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_weight="1"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginRight="5dp"
+                        android:includeFontPadding="false"
+                        android:text="@string/str_realocate"
+                        android:textAllCaps="false"
+                        app:iconGravity="textStart"
+                        app:icon="@drawable/ic_refresh"
+                        app:iconSize="12dp"
+                        android:textSize="12dp"
+                        android:fontFamily="sans-serif"
+                        app:strokeColor="@color/colorPrimary" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/service_card_edit"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_weight="1"
+                        android:textSize="12dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_toRightOf="@id/service_card_realocate"
+                        android:includeFontPadding="false"
+                        android:text="@string/str_edit"
+                        android:textAllCaps="false"
+                        app:icon="@drawable/ic_edit"
+                        app:iconSize="12dp"
+                        android:fontFamily="sans-serif"
+                        app:strokeColor="@color/colorPrimary" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/service_card_linearright"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="tecnico"
-                android:layout_gravity="center"
-                android:layout_below="@id/service_card_image"
-                />
+                android:layout_weight="1.1"
+                android:layout_alignParentRight="true"
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/service_card_status"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="status"
-                android:backgroundTint="@color/colorPrimary"
-                android:layout_gravity="center"
-                android:layout_below="@id/service_card_technician"
-                android:layout_alignParentRight="true"/>
-            <ImageView
-                android:id="@+id/estado_color"
-                android:layout_width="20dp"
-                android:layout_marginTop="10dp"
-                android:layout_height="20dp"
-                android:src="@drawable/ic_fiber_manual_record_black_24dp"
-                android:tint="@color/colorPrimary"
-                android:layout_gravity="center"/>
+                <ImageView
+                    android:id="@+id/service_card_image"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_electrical_worker" />
+
+                <TextView
+                    android:id="@+id/service_card_technician"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/service_card_image"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="5dp"
+                    android:text="José Alberto Tone Ribeiro"
+                    android:textAlignment="center" />
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/service_card_technician"
+                    android:layout_gravity="center">
+
+
+                    <TextView
+                        android:id="@+id/service_card_status"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="3.5dp"
+                        android:layout_toRightOf="@id/estado_color"
+                        android:backgroundTint="@color/colorPrimary"
+                        android:text="status" />
+
+                    <ImageView
+                        android:id="@+id/estado_color"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_marginTop="5dp"
+                        android:src="@drawable/ic_fiber_manual_record_black_24dp"
+                        android:tint="@color/colorPrimary" />
+
+                </RelativeLayout>
+
+
+            </LinearLayout>
+
+
         </LinearLayout>
-
-
-        <Button
-            android:id="@+id/service_card_realocate"
-            style="@style/Widget.MaterialComponents.Button.TextButton.Dialog"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_alignParentBottom="true"
-            android:includeFontPadding="false"
-            android:textAllCaps="false"
-            android:text="Realocar"/>
-
-        <Button
-            android:id="@+id/service_card_edit"
-            style="@style/Widget.MaterialComponents.Button.TextButton.Dialog"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_marginLeft="10dp"
-            android:layout_alignParentBottom="true"
-            android:textAllCaps="false"
-            android:includeFontPadding="false"
-            android:layout_toRightOf="@id/service_card_realocate"
-            android:text="Editar" />
-        </RelativeLayout>
 
     </com.google.android.material.card.MaterialCardView>
 
 
-</LinearLayout>
+</RelativeLayout>

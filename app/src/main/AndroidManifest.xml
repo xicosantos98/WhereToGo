@@ -23,7 +23,7 @@
             android:exported="true" />
 
         <activity android:name=".Tecnico.TecMapActivity" />
-        <activity android:name=".Admin.AdminMapActivity" />
+        <activity android:name=".Admin.AdminMapActivity" android:windowSoftInputMode="adjustPan" />
 
         <service android:name=".Classes.MyFirebaseMessagingService">
             <intent-filter>

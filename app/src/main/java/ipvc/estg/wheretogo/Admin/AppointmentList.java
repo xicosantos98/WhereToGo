@@ -110,7 +110,7 @@ public class AppointmentList extends Fragment {
     public void initializeArray (){
         SimpleDateFormat fmt = new SimpleDateFormat("dd-MM-yyyy");
 
-        LocalDateTime l = new LocalDateTime().minusDays(1);
+        LocalDateTime l = new LocalDateTime().minusDays(2);
         DateFormat df = new DateFormat();
         String date = df.format("dd-MM-yyyy", l.toDate()).toString();
 

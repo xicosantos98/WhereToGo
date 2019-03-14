@@ -12,4 +12,11 @@
     <string name="str_technician">Técnico</string>
     <string name="str_logout_message">Deseja terminar sessão ?</string>
     <string name="str_cancel">Cancelar</string>
+    <string name="str_realocate">Realocar</string>
+    <string name="str_edit">Editar</string>
+    <string name="str_search_address">Insira morada e cód. postal</string>
+    <string name="str_search">Pesquisar</string>
+    <string name="str_insert_desc">Insira descrição do serviço</string>
+    <string name="str_choose_option">Escolha o endereço</string>
+    <string name="str_confirm">Confirmar</string>
 </resources>

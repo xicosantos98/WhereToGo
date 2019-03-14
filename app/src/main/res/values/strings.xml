@@ -18,4 +18,30 @@
     <string name="str_technician">Technician</string>
     <string name="str_logout_message">Do you wish to logout ?</string>
     <string name="str_cancel">Cancel</string>
+    <string name="str_realocate">Reallocate</string>
+    <string name="str_edit">Edit</string>
+    <string name="str_search_address">Type Address and Postal Code</string>
+    <string name="str_search">Search</string>
+    <string name="str_insert_desc">Insert appointment description</string>
+    <string name="str_choose_option">Choose address</string>
+
+
+    <string-array name="countries_array">
+        <item>R. Manuel Espregueira, 4935</item>
+        <item>India</item>
+        <item>USA</item>
+        <item>Indonesia</item>
+        <item>Brazil</item>
+        <item>Pakistan</item>
+        <item>Nigeria</item>
+        <item>Bangladesh</item>
+        <item>Russia</item>
+    </string-array>
+
+    <string-array name="types_array">
+        <item>Reparação Router</item>
+        <item>Mudança cabo</item>
+        <item>USA</item>
+    </string-array>
+    <string name="str_confirm">Confirm</string>
 </resources>
