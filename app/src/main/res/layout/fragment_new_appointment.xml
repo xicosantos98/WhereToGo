@@ -22,7 +22,7 @@
 
 
             <EditText
-                android:id="@+id/input_username"
+                android:id="@+id/input_address"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
@@ -34,7 +34,9 @@
 
 
             <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_search_address"
                 style="@style/Widget.MaterialComponents.Button.TextButton.Dialog"
+                android:visibility="invisible"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.8"
@@ -44,6 +46,7 @@
                 app:iconTint="@color/colorPrimary" />
 
             <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_clean_address"
                 style="@style/Widget.MaterialComponents.Button.TextButton.Dialog"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -82,10 +85,11 @@
         </com.google.android.material.textfield.TextInputLayout-->
 
         <LinearLayout
+            android:id="@+id/linear_hide"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:visibility="invisible">
+            android:visibility="visible">
 
             <LinearLayout
                 android:layout_width="match_parent"

@@ -27,6 +27,7 @@ public class TecMapActivity extends AppCompatActivity {
 
     Fragment fragment;
     BottomNavigationItemView itemView;
+    String user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +35,8 @@ public class TecMapActivity extends AppCompatActivity {
         setContentView(R.layout.activity_tec_map);
 
         Intent i = getIntent();
-        getSupportActionBar().setTitle(" " + getString(R.string.str_technician) + ": " + i.getStringExtra("USER"));
+        user = i.getStringExtra("USER");
+        getSupportActionBar().setTitle(" " + getString(R.string.str_technician) + ": " + user);
         getSupportActionBar().setLogo(R.drawable.ic_account_circle_black_24dp);
         getSupportActionBar().setDisplayUseLogoEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -47,9 +49,14 @@ public class TecMapActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 switch (menuItem.getItemId()) {
                     case R.id.navigation_ListAppoint_tec:
-                        Toast.makeText(TecMapActivity.this, "Servicos", Toast.LENGTH_SHORT).show();
-                        //itemView.removeViewAt(2);
+
+                        Bundle bundle = new Bundle();
+                        bundle.putString("USER", user);
+                        fragment = new TecServicesFragment();
+                        fragment.setArguments(bundle);
                         break;
+
+                        //itemView.removeViewAt(2);
                     case R.id.navigation_map_tec:
                         fragment = new TecMapFragment(); break;
                     case R.id.navigation_logout_tec:

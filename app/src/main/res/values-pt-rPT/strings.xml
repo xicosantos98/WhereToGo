@@ -19,4 +19,5 @@
     <string name="str_insert_desc">Insira descrição do serviço</string>
     <string name="str_choose_option">Escolha o endereço</string>
     <string name="str_confirm">Confirmar</string>
+    <string name="str_api_geo">AIzaSyD3MzrBu4w8kXQ318h8g_UC1qTrRO8EXKI</string>
 </resources>

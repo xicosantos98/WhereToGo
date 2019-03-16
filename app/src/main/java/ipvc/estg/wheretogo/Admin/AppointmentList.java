@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
@@ -53,6 +54,7 @@ public class AppointmentList extends Fragment {
     List<Servico> servicoList = new ArrayList<>();
     List<Servico> listaAtualizar = new ArrayList<>();
     Servico startingServico = null;
+    View v;
 
     ServiceAdapter serviceAdapter;
     Servico s;
@@ -72,7 +74,7 @@ public class AppointmentList extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v =inflater.inflate(R.layout.fragment_appointment_list, container, false);
+        v =inflater.inflate(R.layout.fragment_appointment_list, container, false);
 
         ref = FirebaseDatabase.getInstance().getReference("servico");
 
@@ -108,9 +110,9 @@ public class AppointmentList extends Fragment {
     }
 
     public void initializeArray (){
-        SimpleDateFormat fmt = new SimpleDateFormat("dd-MM-yyyy");
+        //SimpleDateFormat fmt = new SimpleDateFormat("dd-MM-yyyy");
 
-        LocalDateTime l = new LocalDateTime().minusDays(2);
+        LocalDateTime l = new LocalDateTime().minusDays(3);
         DateFormat df = new DateFormat();
         String date = df.format("dd-MM-yyyy", l.toDate()).toString();
 
@@ -122,7 +124,6 @@ public class AppointmentList extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                Toast.makeText(getActivity(), "Criei lista", Toast.LENGTH_SHORT).show();
                 //servicoList.clear();
 
                 if(dataSnapshot.exists()){
@@ -135,7 +136,6 @@ public class AppointmentList extends Fragment {
 
                     serviceAdapter = new ServiceAdapter(recycler, getActivity(), listaAtualizar);
 
-                    recycler.setAdapter(serviceAdapter);
 
                     serviceAdapter.setLoadMore(new ILoadMore() {
                         @Override
@@ -158,10 +158,12 @@ public class AppointmentList extends Fragment {
                                     }
                                 }, 2000);
                             }else {
-                                Toast.makeText(getActivity(), "Data Loaded", Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(getActivity(), "Data Loaded", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
+
+                    recycler.setAdapter(serviceAdapter);
 
                 }
             }
@@ -180,7 +182,7 @@ public class AppointmentList extends Fragment {
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                Toast.makeText(getActivity(), "Alteração", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(), "Alteração", Toast.LENGTH_SHORT).show();
                 final Servico editServico = dataSnapshot.getValue(Servico.class);
 
                 if(listaAtualizar.size() != 0){

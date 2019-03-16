@@ -43,6 +43,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONObject;
 import org.joda.time.*;
+import org.joda.time.LocalDateTime;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -133,7 +134,9 @@ public class TecMapFragment extends Fragment implements OnMapReadyCallback {
         pontoFinal = new MarkerOptions().position(new LatLng(41.702133, -8.848484)).title("Location 2");
 
         LocalDateTime l = new LocalDateTime();
-        String date = l.toLocalDate().toString();
+        android.text.format.DateFormat df = new android.text.format.DateFormat();
+        String date = df.format("dd-MM-yyyy", l.toDate()).toString();
+
         waypoints = new ArrayList<>();
 
 
