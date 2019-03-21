@@ -1,11 +1,14 @@
 package ipvc.estg.wheretogo.Classes;
 
+import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
+
+import ipvc.estg.wheretogo.Tecnico.TecMapActivity;
 
 public class NotificationReceiver extends BroadcastReceiver {
     @Override
@@ -17,6 +20,8 @@ public class NotificationReceiver extends BroadcastReceiver {
 
         if (acception.equals("Sim")){
             Toast.makeText(context, "Aceite", Toast.LENGTH_SHORT).show();
+            Intent refresh = new Intent(context, TecMapActivity.class);
+            context.startActivity(refresh);
         }else{
             Toast.makeText(context, "Recusar", Toast.LENGTH_SHORT).show();
         }

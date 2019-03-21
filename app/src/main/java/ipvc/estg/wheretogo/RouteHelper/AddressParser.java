@@ -24,6 +24,7 @@ public class AddressParser {
 
                 JSONObject objectResult = results.getJSONObject(i);
                 String addres = objectResult.getString("formatted_address");
+
                 JSONObject objectLocation = objectResult.getJSONObject("geometry").getJSONObject("location");
                 hm.put(addres, objectLocation);
                 Log.d("JSON", "CHEGUEI");

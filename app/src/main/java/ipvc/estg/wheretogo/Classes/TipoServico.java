@@ -26,4 +26,9 @@ public class TipoServico {
     public double getTempoDuracao() {
         return tempoDuracao;
     }
+
+    @Override
+    public String toString() {
+        return nome;
+    }
 }

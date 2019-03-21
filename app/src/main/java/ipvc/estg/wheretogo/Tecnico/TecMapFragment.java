@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 
@@ -36,6 +37,7 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
@@ -57,8 +59,11 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import ipvc.estg.wheretogo.Classes.MyUser;
+import ipvc.estg.wheretogo.Classes.ServiceLocation;
 import ipvc.estg.wheretogo.Classes.Servico;
 import ipvc.estg.wheretogo.Classes.Utils;
+import ipvc.estg.wheretogo.Login.LoginActivity;
 import ipvc.estg.wheretogo.R;
 import ipvc.estg.wheretogo.RouteHelper.DataParser;
 import ipvc.estg.wheretogo.RouteHelper.MySingleton;
@@ -76,22 +81,25 @@ public class TecMapFragment extends Fragment implements OnMapReadyCallback {
     PointsParser pointsParser;
     List<List<HashMap<String, String>>> result;
     public static ArrayList<Integer> orderedWaypoints;
-    private MarkerOptions pontoInicial, pontoFinal;
+    private MarkerOptions pontoInicial = LoginActivity.pontoInicial;
+    private MarkerOptions pontoFinal = LoginActivity.pontoFinal;
     private ArrayList<LatLng> waypoints;
     private Polyline currentPolyline;
     private PolylineOptions polylineOptions;
     private ArrayList<Servico> servicosTecnico;
     DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
     private String user;
+    private DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("users");
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)          {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_tec_map, container, false);
 
         orderedWaypoints = new ArrayList<>();
         parser = new DataParser();
         pointsParser = new PointsParser();
-        user = ((TecMapActivity)getActivity()).getUser();
+        //user = ((TecMapActivity) getActivity()).getUser();
+        user = LoginActivity.user;
 
         // Gets the MapView from the XML layout and creates it
         mapView = (MapView) v.findViewById(R.id.mapViewTec);
@@ -113,8 +121,7 @@ public class TecMapFragment extends Fragment implements OnMapReadyCallback {
                 map = googleMap;
                 map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
-                map.addMarker(pontoFinal);
-                map.addMarker(pontoFinal);
+
 
                 // For zooming automatically to the location of the marker
                 CameraPosition cameraPosition = new CameraPosition.Builder()
@@ -129,8 +136,27 @@ public class TecMapFragment extends Fragment implements OnMapReadyCallback {
         return v;
     }
 
-    public void createPoints(){
-        pontoInicial = new MarkerOptions().position(new LatLng(41.702133, -8.848484)).title("Location 1");
+    public void createPoints() {
+        Query queryUser = usersRef.orderByChild("nome").equalTo(user);
+
+        queryUser.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                MyUser u = null;
+                for (DataSnapshot d : dataSnapshot.getChildren()) {
+                    u = d.getValue(MyUser.class);
+                }
+                pontoInicial = new MarkerOptions()
+                        .position(new LatLng(u.getLocation()
+                                .getLatitude(), u.getLocation().getLongitude())).title("Início");
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        //pontoInicial = new MarkerOptions().position(new LatLng(41.702133, -8.848484)).title("Location 1");
         pontoFinal = new MarkerOptions().position(new LatLng(41.702133, -8.848484)).title("Location 2");
 
         LocalDateTime l = new LocalDateTime();
@@ -145,18 +171,6 @@ public class TecMapFragment extends Fragment implements OnMapReadyCallback {
                 .equalTo(date);
 
         query.addListenerForSingleValueEvent(valueEventListener);
-
-
-        /*LatLng waypoint1 = new LatLng(41.693257, -8.846853);
-        LatLng waypoint2 = new LatLng(41.690134, -8.830279);
-        LatLng waypoint3 = new LatLng(41.694667, -8.833592);
-        LatLng waypoint4 = new LatLng(41.695114, -8.820588);
-
-
-        waypoints.add(waypoint1);
-        waypoints.add(waypoint2);
-        waypoints.add(waypoint3);
-        waypoints.add(waypoint4);*/
     }
 
     private String getUrl(LatLng origin, LatLng dest, ArrayList<LatLng> waypoints, String directionMode) {
@@ -170,14 +184,14 @@ public class TecMapFragment extends Fragment implements OnMapReadyCallback {
         // Serviços (waypoints)
         String waypointsString = "waypoints=optimize:true|";
 
-        for(LatLng coor : waypoints){
+        for (LatLng coor : waypoints) {
             waypointsString += (coor.latitude + "," + coor.longitude + "|");
         }
 
         // Mode
         String mode = "mode=" + directionMode;
         // Building the parameters to the web service
-        String parameters = str_origin + "&" + str_dest + "&" + waypointsString + "&"  + mode;
+        String parameters = str_origin + "&" + str_dest + "&" + waypointsString + "&" + mode;
         // Output format
         String output = "json";
         // Building the url to the web service
@@ -186,9 +200,9 @@ public class TecMapFragment extends Fragment implements OnMapReadyCallback {
     }
 
 
-    public void createRoute(LatLng origin, LatLng dest, final ArrayList<LatLng> waypoints, String directionMode){
+    public void createRoute(LatLng origin, LatLng dest, final ArrayList<LatLng> waypoints, String directionMode) {
 
-        String url = getUrl(origin,dest,waypoints,directionMode);
+        String url = getUrl(origin, dest, waypoints, directionMode);
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
@@ -200,7 +214,7 @@ public class TecMapFragment extends Fragment implements OnMapReadyCallback {
                             currentPolyline.remove();
                         currentPolyline = map.addPolyline(polylineOptions);
 
-                        for (int i=0; i < waypoints.size(); i++){
+                        for (int i = 0; i < waypoints.size(); i++) {
                             map.addMarker(new MarkerOptions().position(waypoints.get(i)).title("Waypoint " +
                                     (orderedWaypoints.get(i) + 1)).icon(BitmapDescriptorFactory.fromResource(R.drawable.service_pin)));
                         }
@@ -212,11 +226,11 @@ public class TecMapFragment extends Fragment implements OnMapReadyCallback {
                         Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_SHORT).show();
                         Log.d("TAG", error.getMessage());
                     }
-                }){
+                }) {
 
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String,String> headers = new HashMap<>();
+                Map<String, String> headers = new HashMap<>();
                 headers.put("Content-Type", "application/json; charset=utf-8");
                 headers.put("User-agent", System.getProperty("http.agent"));
                 headers.put("Connection", "close");
@@ -232,19 +246,22 @@ public class TecMapFragment extends Fragment implements OnMapReadyCallback {
     ValueEventListener valueEventListener = new ValueEventListener() {
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
-            if(dataSnapshot.exists()){
+            if (dataSnapshot.exists()) {
 
-                for (DataSnapshot d : dataSnapshot.getChildren()){
+                for (DataSnapshot d : dataSnapshot.getChildren()) {
                     Servico service = d.getValue(Servico.class);
 
-                    if(service.getTecnico().equals(user)){
+                    if (service.getTecnico().equals(user)) {
                         LatLng latLng = new LatLng(service.getCoordenadas().getLatitude(), service.getCoordenadas().getLongitude());
                         Log.d("TAG", "LATLNG: " + latLng.longitude);
                         waypoints.add(latLng);
                     }
                 }
-                createRoute(pontoInicial.getPosition(),pontoFinal.getPosition(),waypoints,"driving");
 
+
+                createRoute(pontoInicial.getPosition(), pontoFinal.getPosition(), waypoints, "driving");
+                map.addMarker(pontoInicial);
+                map.addMarker(pontoFinal);
             }
         }
 

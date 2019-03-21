@@ -101,7 +101,7 @@ public class AppointmentList extends Fragment {
         /*String id = Utils.serviceRef.push().getKey();
 
         s=  new Servico(id, "Rua Manuel Bino", "Reparação Router", Estado.Pendente,
-                new ServiceLocation(42,42), new TipoServico("1", "Reparacao Router", 120), "32323332", "12-03-2019", "14:40", false, "diferente" );
+                new ServiceLocation(42,42), new TipoServico("1", "Reparacao Router", 120), "32323332", "12-03-2019", "14:40", false, "mSjdhGisUwZcUcNE8TrPCuXL7xH3" );
         servicoList.add(s);
         FirebaseDatabase.getInstance().getReference("servico").child(id).setValue(s);*/
 
@@ -132,7 +132,12 @@ public class AppointmentList extends Fragment {
                         servicoList.add(s);
                     }
 
-                    listaAtualizar.addAll(servicoList.subList(0,10));
+                    if (servicoList.size() >= 10) {
+                        listaAtualizar.addAll(servicoList.subList(0,10));
+                    }else{
+                        listaAtualizar.addAll(servicoList.subList(0, servicoList.size()));
+                    }
+
 
                     serviceAdapter = new ServiceAdapter(recycler, getActivity(), listaAtualizar);
 

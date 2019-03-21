@@ -112,7 +112,7 @@ public class ServiceAdapterTec extends RecyclerView.Adapter<RecyclerView.ViewHol
             String estado = servicos.get(position).getEstado().toString();
             ItemViewHolderTec viewHolder = (ItemViewHolderTec) holder;
             viewHolder.estado.setText(servicos.get(position).getEstado().toString());
-            viewHolder.data.setText(servicos.get(position).getData()+" "+ servicos.get(position).getHoraPrevista());
+            viewHolder.data.setText(servicos.get(position).getData());
             viewHolder.descricao.setText(servicos.get(position).getDescricao());
             viewHolder.morada.setText(servicos.get(position).getMorada());
 

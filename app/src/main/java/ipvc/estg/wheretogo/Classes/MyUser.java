@@ -7,14 +7,16 @@ public class MyUser {
     private String contato;
     private TipoUser tipo;
     private String token;
+    private ServiceLocation location;
 
-    public MyUser(String id, String nome, String email, String contato, TipoUser tipo, String token) {
+    public MyUser(String id, String nome, String email, String contato, TipoUser tipo, String token,ServiceLocation location) {
         this.id = id;
         this.nome = nome;
         this.email = email;
         this.contato = contato;
         this.tipo = tipo;
         this.token = token;
+        this.location = location;
     }
 
     public MyUser() {
@@ -42,5 +44,9 @@ public class MyUser {
 
     public String getToken() {
         return token;
+    }
+
+    public ServiceLocation getLocation() {
+        return location;
     }
 }

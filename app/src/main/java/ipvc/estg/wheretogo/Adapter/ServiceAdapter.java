@@ -119,7 +119,7 @@ public class ServiceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             ItemViewHolder viewHolder = (ItemViewHolder) holder;
             viewHolder.estado.setText(servicos.get(position).getEstado().toString());
             viewHolder.tecnico.setText(servicos.get(position).getTecnico());
-            viewHolder.data.setText(servicos.get(position).getData()+" "+ servicos.get(position).getHoraPrevista());
+            viewHolder.data.setText(servicos.get(position).getData());
             viewHolder.descricao.setText(servicos.get(position).getDescricao());
             viewHolder.morada.setText(servicos.get(position).getMorada());
 

@@ -8,13 +8,16 @@ public class Localizacao {
     private String id;
     private ServiceLocation location;
     private String hora;
-    private MyUser tecnico;
+    private String tecnico;
 
-    public Localizacao(String id, ServiceLocation location, String hora, MyUser tecnico) {
+    public Localizacao(String id, ServiceLocation location, String hora, String tecnico) {
         this.id = id;
         this.location = location;
         this.hora = hora;
         this.tecnico = tecnico;
+    }
+
+    public Localizacao() {
     }
 
     public String getId() {
@@ -29,7 +32,7 @@ public class Localizacao {
         return hora;
     }
 
-    public MyUser getTecnico() {
+    public String getTecnico() {
         return tecnico;
     }
 }

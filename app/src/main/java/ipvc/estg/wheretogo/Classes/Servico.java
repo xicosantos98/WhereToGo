@@ -15,11 +15,9 @@ public class Servico {
     private TipoServico tipo;
     private String contato;
     private String data;
-    private String horaPrevista;
-    private boolean atrasado;
     private String tecnico;
 
-    public Servico(String id, String morada, String descricao, Estado estado, ServiceLocation coordenadas, TipoServico tipo, String contato, String data, String horaPrevista, boolean atrasado, String tecnico) {
+    public Servico(String id, String morada, String descricao, Estado estado, ServiceLocation coordenadas, TipoServico tipo, String contato, String data, String tecnico) {
         this.id = id;
         this.morada = morada;
         this.descricao = descricao;
@@ -28,8 +26,6 @@ public class Servico {
         this.tipo = tipo;
         this.contato = contato;
         this.data = data;
-        this.horaPrevista = horaPrevista;
-        this.atrasado = atrasado;
         this.tecnico = tecnico;
     }
 
@@ -65,14 +61,6 @@ public class Servico {
     }
 
     public String getData() {return data;}
-
-    public String getHoraPrevista() {
-        return horaPrevista;
-    }
-
-    public boolean isAtrasado() {
-        return atrasado;
-    }
 
     public String getTecnico() {
         return tecnico;

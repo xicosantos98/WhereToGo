@@ -74,7 +74,7 @@ public class TecServicesFragment extends Fragment {
     public void initializeArray (){
         //SimpleDateFormat fmt = new SimpleDateFormat("dd-MM-yyyy");
 
-        LocalDateTime l = new LocalDateTime().minusDays(1);
+        LocalDateTime l = new LocalDateTime();
         DateFormat df = new DateFormat();
         String date = df.format("dd-MM-yyyy", l.toDate()).toString();
 
@@ -112,7 +112,7 @@ public class TecServicesFragment extends Fragment {
         query.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                Toast.makeText(getActivity(), "Adicionei", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(), "Adicionei", Toast.LENGTH_SHORT).show();
             }
 
             @Override

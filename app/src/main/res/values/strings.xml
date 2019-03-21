@@ -45,4 +45,5 @@
     </string-array>
     <string name="str_confirm">Confirm</string>
     <string name="str_api_geo">AIzaSyD3MzrBu4w8kXQ318h8g_UC1qTrRO8EXKI</string>
+    <string name="str_new_service">New appointment</string>
 </resources>

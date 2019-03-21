@@ -1,20 +1,26 @@
 package ipvc.estg.wheretogo.Admin;
 
 
-import android.location.Address;
+import android.app.Activity;
+import android.app.TaskStackBuilder;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -23,17 +29,37 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
+import org.joda.time.LocalDateTime;
+import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.function.Supplier;
 
+import ipvc.estg.wheretogo.Classes.Estado;
+import ipvc.estg.wheretogo.Classes.Localizacao;
+import ipvc.estg.wheretogo.Classes.MapUtil;
+import ipvc.estg.wheretogo.Classes.MyUser;
+import ipvc.estg.wheretogo.Classes.ServiceLocation;
+import ipvc.estg.wheretogo.Classes.Servico;
+import ipvc.estg.wheretogo.Classes.SimpleCallback;
+import ipvc.estg.wheretogo.Classes.TipoServico;
+import ipvc.estg.wheretogo.Classes.Utils;
+import ipvc.estg.wheretogo.Login.LoginActivity;
 import ipvc.estg.wheretogo.R;
 import ipvc.estg.wheretogo.RouteHelper.AddressParser;
 import ipvc.estg.wheretogo.RouteHelper.MySingleton;
@@ -43,10 +69,35 @@ import ipvc.estg.wheretogo.RouteHelper.MySingleton;
  */
 public class NewAppointment extends Fragment {
 
-    Button btnSearch, btnErase;
+    Button btnSearch, btnErase, btnConfirm;
     EditText address;
+    EditText description;
     HashMap<String,JSONObject> result;
-    Spinner spinnerMoradas;
+    Spinner spinnerMoradas, spinnerTipo, spinnerTecnicos;
+    DatabaseReference tipos = FirebaseDatabase.getInstance().getReference("tipo_servico");
+    DatabaseReference servicos = FirebaseDatabase.getInstance().getReference("servico");
+    DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("users");
+
+    private MarkerOptions pontoInicial = LoginActivity.pontoInicial;
+    private MarkerOptions pontoFinal = LoginActivity.pontoFinal;
+
+
+    private List<LatLng> waypoints = new ArrayList<>();
+    private int totServicosPendentes = 0;
+    private double horasServico = 0;
+    private int totTime = 0;
+
+    //List<TipoServico> tiposList = new ArrayList<>();
+    Map<String,TipoServico> tiposList = new HashMap<>();
+    Map<String,Integer> userLocDistance = new HashMap<>();
+    List<String> availableUsers = new ArrayList<>();
+    List<String> orderedUsers = new ArrayList<>();
+    List<Localizacao> locals = new ArrayList<>();
+
+
+    LinearLayout service, buttons;
+
+
 
 
     public NewAppointment() {
@@ -62,14 +113,30 @@ public class NewAppointment extends Fragment {
 
         btnSearch = v.findViewById(R.id.btn_search_address);
         btnErase = v.findViewById(R.id.btn_clean_address);
+        btnConfirm = v.findViewById(R.id.btn_insert_service);
         address = v.findViewById(R.id.input_address);
+        description = v.findViewById(R.id.text_description);
+
+        service = v.findViewById(R.id.linear_hide);
+        buttons = v.findViewById(R.id.linear_buttons);
+
+        spinnerMoradas = (Spinner) v.findViewById(R.id.spinner_moradas);
+        spinnerTipo = (Spinner) v.findViewById(R.id.spinner_tipo);
+        spinnerTecnicos = (Spinner) v.findViewById(R.id.spinner_tecnico);
+
+        address.setText("Rua Manuel Espregueira");
+        setAvailableUsers();
+
+
 
 
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //address.setText("Rua Manuel Espregueira");
                 createRequest(address.getText().toString());
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                spinnerMoradas.requestFocus();
             }
         });
 
@@ -78,6 +145,55 @@ public class NewAppointment extends Fragment {
             @Override
             public void onClick(View v) {
                 address.setText("");
+            }
+        });
+
+        btnConfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                JSONObject serviceLocation = result.get(spinnerMoradas.getSelectedItem().toString());
+                try {
+
+                    Double latitude = (serviceLocation.getDouble("lat"));
+                    Double longitude = (serviceLocation.getDouble("lng"));
+
+                    LocalDateTime l = new LocalDateTime();
+                    DateFormat df = new DateFormat();
+                    String date = df.format("dd-MM-yyyy", l.toDate()).toString();
+
+                    String id = servicos.push().getKey();
+                    Servico s =  new Servico(id, spinnerMoradas.getSelectedItem().toString(), description.getText().toString(), Estado.Pendente,
+                            new ServiceLocation(latitude,longitude), tiposList.get(spinnerTipo.getSelectedItem().toString()),
+                            "32323332", date,
+                            spinnerTecnicos.getSelectedItem().toString());
+
+                    servicos.child(id).setValue(s);
+
+                    Query queryUser = usersRef.orderByChild("nome").equalTo(spinnerTecnicos.getSelectedItem().toString());
+
+                    queryUser.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            MyUser u = null;
+                            for (DataSnapshot d : dataSnapshot.getChildren()) {
+                                u = d.getValue(MyUser.class);
+                            }
+                            Utils.sendNotification(spinnerMoradas.getSelectedItem().toString(), getActivity(), u.getToken());
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
             }
         });
 
@@ -102,29 +218,45 @@ public class NewAppointment extends Fragment {
             }
         });
 
-        spinnerMoradas = (Spinner) v.findViewById(R.id.spinner_moradas);
-        Spinner spinnerTipo = (Spinner) v.findViewById(R.id.spinner_tipo);
 
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
-                getActivity(), R.array.countries_array, android.R.layout.simple_spinner_item);
-        ArrayAdapter<CharSequence> adapterTipo = ArrayAdapter.createFromResource(
-                getActivity(), R.array.types_array, android.R.layout.simple_spinner_item);
 
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        adapterTipo.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        tipos.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-        spinnerTipo.setAdapter(adapterTipo);
+                for (DataSnapshot d : dataSnapshot.getChildren()){
+                    TipoServico t = d.getValue(TipoServico.class);
+                    //tiposList.add(t);
+                    tiposList.put(t.getNome(), t);
+                }
+
+                ArrayAdapter<String> adapterTipo = new ArrayAdapter<String>(getActivity(),
+                        android.R.layout.simple_spinner_item, new ArrayList<String>(tiposList.keySet()));
+                adapterTipo.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spinnerTipo.setAdapter(adapterTipo);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
 
         return v;
     }
 
 
-    public  class MyOnItemSelectedListener implements AdapterView.OnItemSelectedListener {
+    public class MyOnItemSelectedListener implements AdapterView.OnItemSelectedListener {
 
         public void onItemSelected(AdapterView<?> parent,
                                    View view, int pos, long id) {
-            Toast.makeText(parent.getContext(), "Item is " +
-                    parent.getItemAtPosition(pos).toString(), Toast.LENGTH_LONG).show();
+            service.setVisibility(View.VISIBLE);
+            orderArray();
+            buttons.setVisibility(View.VISIBLE);
+
         }
 
         public void onNothingSelected(AdapterView parent) {
@@ -152,7 +284,8 @@ public class NewAppointment extends Fragment {
 
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                         spinnerMoradas.setAdapter(adapter);
-
+                        spinnerMoradas.setOnItemSelectedListener(new MyOnItemSelectedListener());
+                        spinnerMoradas.setSelection(0);
 
                     }
                 }, new Response.ErrorListener() {
@@ -174,5 +307,98 @@ public class NewAppointment extends Fragment {
         };
         MySingleton.getInstance(getActivity()).addToRequestQueue(jsonObjectRequest);
     }
+
+    public void setAvailableUsers(){
+        Utils.getAllTecnicos(new SimpleCallback() {
+            @Override
+            public void callback(Object data) {
+                List<MyUser> tecnicos = (List<MyUser>) data;
+
+                for (final MyUser user : tecnicos){
+                    Utils.getAllServices(user, new SimpleCallback() {
+                        @Override
+                        public void callback(Object data) {
+
+                            List<Servico> servicos = (List<Servico>) data;
+                            waypoints = new ArrayList<>();
+                            totServicosPendentes = 0;
+                            horasServico = 0;
+                            totTime = 0;
+
+                            if(servicos.isEmpty()){
+                                availableUsers.add(user.getNome());
+                            }
+
+                            for (Servico s : servicos){
+                                if (s.getEstado().equals(Estado.Pendente)){
+                                    totServicosPendentes ++;
+                                    horasServico += s.getTipo().getTempoDuracao();
+                                    waypoints.add(new LatLng(s.getCoordenadas().getLatitude(), s.getCoordenadas().getLongitude()));
+                                }else if(s.getEstado().equals(Estado.Concluido)){
+                                    horasServico += s.getTipo().getTempoDuracao();
+                                    waypoints.add(new LatLng(s.getCoordenadas().getLatitude(), s.getCoordenadas().getLongitude()));
+                                }
+                            }
+
+                            if(!waypoints.isEmpty()){
+                                String url = Utils.getUrl(pontoInicial.getPosition(), pontoFinal.getPosition(), waypoints, "driving", getActivity());
+                                Utils.getDistancesTime(url, getActivity(), new SimpleCallback() {
+                                    @Override
+                                    public void callback(Object data) {
+                                        totTime = (Integer)data;
+                                        totTime = totTime/60;
+
+                                        horasServico += totTime;
+                                        horasServico = horasServico/60;
+
+                                        if(totServicosPendentes <= 3 && horasServico <= 7){
+                                            availableUsers.add(user.getNome());
+                                        }
+
+                                        orderArray();
+                                    }
+                                });
+                            }
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+
+    public void orderArray(){
+
+
+        String selectedMorada = (String)spinnerMoradas.getSelectedItem();
+        Utils.getLastLocations(availableUsers, new SimpleCallback() {
+            @Override
+            public void callback(Object data) {
+                Map<String,ServiceLocation> map = (Map<String,ServiceLocation>) data;
+                List<ServiceLocation> locations = new ArrayList<ServiceLocation>(map.values());
+                List<String> users = new ArrayList<String>(map.keySet());
+
+                Utils.usersMapDistance(result.get(selectedMorada), locations,users,getActivity(), new SimpleCallback() {
+                    @Override
+                    public void callback(Object data) {
+                        Map<String,Integer> userDistancias = (Map<String,Integer>) data;
+                        Map<String,Integer> orderedMap = MapUtil.sortByValue(userDistancias);
+                        availableUsers = new ArrayList<>(orderedMap.keySet());
+                        Log.d("NAO ORDENADO", userDistancias.toString());
+                        Log.d("ORDENADO", orderedMap.toString());
+                        ArrayAdapter<String> adapterUser = new ArrayAdapter<String>(getActivity(),
+                                android.R.layout.simple_spinner_item, availableUsers);
+                        adapterUser.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        spinnerTecnicos.setAdapter(adapterUser);
+                    }
+                });
+
+            }
+        });
+
+    }
+
+
+
 
 }

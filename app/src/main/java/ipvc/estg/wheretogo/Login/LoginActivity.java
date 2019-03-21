@@ -12,6 +12,8 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -50,6 +52,9 @@ public class LoginActivity extends AppCompatActivity {
     Button btnLogin;
     DatabaseReference refUsers, refLocalizacao, refTipo, refServico;
     MyUser userLogin;
+    public static String user;
+    public static MarkerOptions pontoInicial = new MarkerOptions().position(new LatLng(41.702133, -8.848484)).title("Ponto Inicial");
+    public static MarkerOptions pontoFinal = new MarkerOptions().position(new LatLng(41.702133, -8.848484)).title("Ponto Final");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +81,11 @@ public class LoginActivity extends AppCompatActivity {
         password.setText("12345678");
 
 
+        LocalDateTime l = LocalDateTime.now();
+
+
+
+
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,7 +98,7 @@ public class LoginActivity extends AppCompatActivity {
         });
 
 
-        //createAccount("franciscosantos@ipvc.pt", "12345678");
+        //createAccount("lobarinhas@ipvc.pt", "12345678");
 
     }
 
@@ -157,7 +167,7 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             Log.d("TAG", "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            refUsers.child(user.getUid()).setValue(new MyUser(user.getUid(), "José Silva", email, "968345678", TipoUser.Tecnico, ""));
+                            refUsers.child(user.getUid()).setValue(new MyUser(user.getUid(), "Lobarinhas", email, "968345678", TipoUser.Tecnico, "", null));
                         } else {
                             Log.w("TAG", "createUserWithEmail:failure", task.getException());
                             Toast.makeText(LoginActivity.this, "Authentication failed.",
@@ -214,6 +224,8 @@ public class LoginActivity extends AppCompatActivity {
             intent = new Intent(this, TecMapActivity.class);
         }
         intent.putExtra("USER", userLogin.getNome());
+        intent.putExtra("ID", userLogin.getId());
         startActivity(intent);
+        LoginActivity.user = userLogin.getNome();
     }
 }
