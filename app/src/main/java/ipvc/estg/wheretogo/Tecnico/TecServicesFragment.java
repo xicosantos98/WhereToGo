@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
@@ -46,6 +47,7 @@ public class TecServicesFragment extends Fragment {
     RecyclerView recycler;
     DatabaseReference ref;
     String username;
+    RelativeLayout error;
 
 
     @Override
@@ -53,6 +55,8 @@ public class TecServicesFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_tec_services, container, false);
+        error = v.findViewById(R.id.relative_error);
+
 
         username = this.getArguments().getString("USER");
 
@@ -81,8 +85,7 @@ public class TecServicesFragment extends Fragment {
 
         Query query = ref.orderByChild("data").equalTo(date);
 
-
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
+        query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
@@ -100,6 +103,10 @@ public class TecServicesFragment extends Fragment {
 
                     recycler.setAdapter(serviceAdapter);
 
+                }
+
+                if(dataSnapshot.getChildrenCount() == 0){
+                    error.setVisibility(View.VISIBLE);
                 }
             }
 
@@ -125,6 +132,7 @@ public class TecServicesFragment extends Fragment {
                         if(servicoList.get(i).getId().equals(editServico.getId())){
                             servicoList.set(i, editServico);
                             serviceAdapter.notifyDataSetChanged();
+                            error.setVisibility(View.INVISIBLE);
                             return;
                         }
                     }

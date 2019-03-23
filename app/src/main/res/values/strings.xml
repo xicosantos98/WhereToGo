@@ -46,4 +46,8 @@
     <string name="str_confirm">Confirm</string>
     <string name="str_api_geo">AIzaSyD3MzrBu4w8kXQ318h8g_UC1qTrRO8EXKI</string>
     <string name="str_new_service">New appointment</string>
+    <string name="str_tlm">Cell Phone Number</string>
+    <string name="str_watch_list">Watch List</string>
+    <string name="str_notify">Technician notified</string>
+    <string name="str_no_appointments">0 appointments found</string>
 </resources>

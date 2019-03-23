@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.Toast;
 
@@ -60,6 +61,7 @@ public class AppointmentList extends Fragment {
     Servico s;
     RecyclerView recycler;
     DatabaseReference ref;
+    RelativeLayout error;
 
 
 
@@ -78,6 +80,7 @@ public class AppointmentList extends Fragment {
 
         ref = FirebaseDatabase.getInstance().getReference("servico");
 
+        error = v.findViewById(R.id.relative_error_admin);
 
         recycler = (RecyclerView) v.findViewById(R.id.rv_appointments);
 
@@ -87,24 +90,6 @@ public class AppointmentList extends Fragment {
 
 
         initializeArray();
-
-
-        /*for (int i=0; i < 20; i++){
-            String id = Utils.serviceRef.push().getKey();
-
-            s=  new Servico(id, "Rua Manuel Bino", "Reparação Router", Estado.Pendente,
-                    new ServiceLocation(42,42), new TipoServico("1", "Reparacao Router", 120), "32323332", "12-03-2019", "14:40", false, String.valueOf(i) );
-            servicoList.add(s);
-            FirebaseDatabase.getInstance().getReference("servico").child(id).setValue(s);
-        }*/
-
-        /*String id = Utils.serviceRef.push().getKey();
-
-        s=  new Servico(id, "Rua Manuel Bino", "Reparação Router", Estado.Pendente,
-                new ServiceLocation(42,42), new TipoServico("1", "Reparacao Router", 120), "32323332", "12-03-2019", "14:40", false, "mSjdhGisUwZcUcNE8TrPCuXL7xH3" );
-        servicoList.add(s);
-        FirebaseDatabase.getInstance().getReference("servico").child(id).setValue(s);*/
-
 
         return v;
     }
@@ -170,6 +155,10 @@ public class AppointmentList extends Fragment {
 
                     recycler.setAdapter(serviceAdapter);
 
+                }
+
+                if(dataSnapshot.getChildrenCount() == 0){
+                    error.setVisibility(View.VISIBLE);
                 }
             }
 

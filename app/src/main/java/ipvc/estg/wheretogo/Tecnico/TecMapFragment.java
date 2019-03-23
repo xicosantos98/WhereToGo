@@ -1,10 +1,12 @@
 package ipvc.estg.wheretogo.Tecnico;
 
 
+import android.app.Dialog;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,9 +15,12 @@ import androidx.fragment.app.Fragment;
 
 import android.text.format.DateUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -35,6 +40,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -120,7 +126,7 @@ public class TecMapFragment extends Fragment implements OnMapReadyCallback {
             public void onMapReady(GoogleMap googleMap) {
                 map = googleMap;
                 map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-
+                //map.setTrafficEnabled(true);
 
 
                 // For zooming automatically to the location of the marker
@@ -132,6 +138,21 @@ public class TecMapFragment extends Fragment implements OnMapReadyCallback {
             }
         });
 
+        Dialog dialog = new Dialog(getActivity());
+        dialog.setContentView(R.layout.dialog_layers);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+
+        FloatingActionButton floatingActionButton =
+                (FloatingActionButton) v.findViewById(R.id.floating_action_button);
+
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getActivity(), "CARREGUEI", Toast.LENGTH_SHORT).show();
+                dialog.show();
+            }
+        });
 
         return v;
     }
@@ -157,7 +178,7 @@ public class TecMapFragment extends Fragment implements OnMapReadyCallback {
             }
         });
         //pontoInicial = new MarkerOptions().position(new LatLng(41.702133, -8.848484)).title("Location 1");
-        pontoFinal = new MarkerOptions().position(new LatLng(41.702133, -8.848484)).title("Location 2");
+        pontoFinal = new MarkerOptions().position(new LatLng(41.702133, -8.848484)).title("Fim de rota");
 
         LocalDateTime l = new LocalDateTime();
         android.text.format.DateFormat df = new android.text.format.DateFormat();
@@ -215,8 +236,7 @@ public class TecMapFragment extends Fragment implements OnMapReadyCallback {
                         currentPolyline = map.addPolyline(polylineOptions);
 
                         for (int i = 0; i < waypoints.size(); i++) {
-                            map.addMarker(new MarkerOptions().position(waypoints.get(i)).title("Waypoint " +
-                                    (orderedWaypoints.get(i) + 1)).icon(BitmapDescriptorFactory.fromResource(R.drawable.service_pin)));
+                            map.addMarker(new MarkerOptions().position(waypoints.get(i)).title((orderedWaypoints.get(i) + 1) + "º Servico").icon(BitmapDescriptorFactory.fromResource(R.drawable.service_pin)));
                         }
 
                     }
@@ -295,5 +315,6 @@ public class TecMapFragment extends Fragment implements OnMapReadyCallback {
     public void onMapReady(GoogleMap googleMap) {
 
     }
+
 
 }

@@ -2,19 +2,21 @@ package ipvc.estg.wheretogo.Admin;
 
 
 import android.app.Activity;
-import android.app.TaskStackBuilder;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -31,6 +33,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -46,10 +49,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-import java.util.function.Supplier;
 
+import androidx.fragment.app.FragmentTransaction;
 import ipvc.estg.wheretogo.Classes.Estado;
 import ipvc.estg.wheretogo.Classes.Localizacao;
 import ipvc.estg.wheretogo.Classes.MapUtil;
@@ -72,7 +73,7 @@ public class NewAppointment extends Fragment {
     Button btnSearch, btnErase, btnConfirm;
     EditText address;
     EditText description;
-    HashMap<String,JSONObject> result;
+    HashMap<String, JSONObject> result;
     Spinner spinnerMoradas, spinnerTipo, spinnerTecnicos;
     DatabaseReference tipos = FirebaseDatabase.getInstance().getReference("tipo_servico");
     DatabaseReference servicos = FirebaseDatabase.getInstance().getReference("servico");
@@ -88,16 +89,14 @@ public class NewAppointment extends Fragment {
     private int totTime = 0;
 
     //List<TipoServico> tiposList = new ArrayList<>();
-    Map<String,TipoServico> tiposList = new HashMap<>();
-    Map<String,Integer> userLocDistance = new HashMap<>();
+    Map<String, TipoServico> tiposList = new HashMap<>();
+    Map<String, Integer> userLocDistance = new HashMap<>();
     List<String> availableUsers = new ArrayList<>();
     List<String> orderedUsers = new ArrayList<>();
     List<Localizacao> locals = new ArrayList<>();
-
+    Fragment fragment;
 
     LinearLayout service, buttons;
-
-
 
 
     public NewAppointment() {
@@ -110,12 +109,15 @@ public class NewAppointment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_new_appointment, container, false);
+        fragment = this;
 
         btnSearch = v.findViewById(R.id.btn_search_address);
         btnErase = v.findViewById(R.id.btn_clean_address);
         btnConfirm = v.findViewById(R.id.btn_insert_service);
         address = v.findViewById(R.id.input_address);
         description = v.findViewById(R.id.text_description);
+        description.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        description.setRawInputType(InputType.TYPE_CLASS_TEXT);
 
         service = v.findViewById(R.id.linear_hide);
         buttons = v.findViewById(R.id.linear_buttons);
@@ -126,8 +128,6 @@ public class NewAppointment extends Fragment {
 
         address.setText("Rua Manuel Espregueira");
         setAvailableUsers();
-
-
 
 
         btnSearch.setOnClickListener(new View.OnClickListener() {
@@ -162,13 +162,13 @@ public class NewAppointment extends Fragment {
                     DateFormat df = new DateFormat();
                     String date = df.format("dd-MM-yyyy", l.toDate()).toString();
 
-                    String id = servicos.push().getKey();
-                    Servico s =  new Servico(id, spinnerMoradas.getSelectedItem().toString(), description.getText().toString(), Estado.Pendente,
-                            new ServiceLocation(latitude,longitude), tiposList.get(spinnerTipo.getSelectedItem().toString()),
+                    /*String id = servicos.push().getKey();
+                    Servico s = new Servico(id, spinnerMoradas.getSelectedItem().toString(), description.getText().toString(), Estado.Pendente,
+                            new ServiceLocation(latitude, longitude), tiposList.get(spinnerTipo.getSelectedItem().toString()),
                             "32323332", date,
                             spinnerTecnicos.getSelectedItem().toString());
 
-                    servicos.child(id).setValue(s);
+                    servicos.child(id).setValue(s);*/
 
                     Query queryUser = usersRef.orderByChild("nome").equalTo(spinnerTecnicos.getSelectedItem().toString());
 
@@ -179,7 +179,20 @@ public class NewAppointment extends Fragment {
                             for (DataSnapshot d : dataSnapshot.getChildren()) {
                                 u = d.getValue(MyUser.class);
                             }
-                            Utils.sendNotification(spinnerMoradas.getSelectedItem().toString(), getActivity(), u.getToken());
+                            //Utils.sendNotification(spinnerMoradas.getSelectedItem().toString(), getActivity(), u.getToken());
+
+                            Snackbar
+                                    .make(getView(), getResources().getString(R.string.str_notify),
+                                            Snackbar.LENGTH_LONG)
+                                    .setAction(getResources().getString(R.string.str_watch_list), new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            Intent intent;
+                                            intent = new Intent(getActivity(), AdminMapActivity.class);
+                                            startActivity(intent);
+                                        }
+                                    })
+                                    .show();
                         }
 
                         @Override
@@ -187,6 +200,9 @@ public class NewAppointment extends Fragment {
 
                         }
                     });
+
+                    FragmentTransaction ft = getFragmentManager().beginTransaction();
+                    ft.detach(fragment).attach(fragment).commit();
 
 
                 } catch (JSONException e) {
@@ -205,9 +221,9 @@ public class NewAppointment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(!s.toString().isEmpty()){
+                if (!s.toString().isEmpty()) {
                     btnSearch.setVisibility(View.VISIBLE);
-                }else{
+                } else {
                     btnSearch.setVisibility(View.INVISIBLE);
                 }
             }
@@ -219,19 +235,18 @@ public class NewAppointment extends Fragment {
         });
 
 
-
         tipos.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                for (DataSnapshot d : dataSnapshot.getChildren()){
+                for (DataSnapshot d : dataSnapshot.getChildren()) {
                     TipoServico t = d.getValue(TipoServico.class);
                     //tiposList.add(t);
                     tiposList.put(t.getNome(), t);
                 }
 
                 ArrayAdapter<String> adapterTipo = new ArrayAdapter<String>(getActivity(),
-                        android.R.layout.simple_spinner_item, new ArrayList<String>(tiposList.keySet()));
+                        R.layout.spinner_item, new ArrayList<String>(tiposList.keySet()));
                 adapterTipo.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 spinnerTipo.setAdapter(adapterTipo);
 
@@ -242,7 +257,6 @@ public class NewAppointment extends Fragment {
 
             }
         });
-
 
 
         return v;
@@ -265,7 +279,7 @@ public class NewAppointment extends Fragment {
     }
 
 
-    public void createRequest(String search){
+    public void createRequest(String search) {
 
         String url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + search +
                 "&region=pt&key=" + getString(R.string.str_api_geo);
@@ -280,7 +294,7 @@ public class NewAppointment extends Fragment {
                         addresses.addAll(result.keySet());
 
                         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
-                                android.R.layout.simple_spinner_item, addresses);
+                                R.layout.spinner_item, addresses);
 
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                         spinnerMoradas.setAdapter(adapter);
@@ -294,11 +308,11 @@ public class NewAppointment extends Fragment {
                         Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_SHORT).show();
                         Log.d("TAG", error.getMessage());
                     }
-                }){
+                }) {
 
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String,String> headers = new HashMap<>();
+                Map<String, String> headers = new HashMap<>();
                 headers.put("Content-Type", "application/json; charset=utf-8");
                 headers.put("User-agent", System.getProperty("http.agent"));
                 headers.put("Connection", "close");
@@ -308,13 +322,13 @@ public class NewAppointment extends Fragment {
         MySingleton.getInstance(getActivity()).addToRequestQueue(jsonObjectRequest);
     }
 
-    public void setAvailableUsers(){
+    public void setAvailableUsers() {
         Utils.getAllTecnicos(new SimpleCallback() {
             @Override
             public void callback(Object data) {
                 List<MyUser> tecnicos = (List<MyUser>) data;
 
-                for (final MyUser user : tecnicos){
+                for (final MyUser user : tecnicos) {
                     Utils.getAllServices(user, new SimpleCallback() {
                         @Override
                         public void callback(Object data) {
@@ -325,33 +339,33 @@ public class NewAppointment extends Fragment {
                             horasServico = 0;
                             totTime = 0;
 
-                            if(servicos.isEmpty()){
+                            if (servicos.isEmpty()) {
                                 availableUsers.add(user.getNome());
                             }
 
-                            for (Servico s : servicos){
-                                if (s.getEstado().equals(Estado.Pendente)){
-                                    totServicosPendentes ++;
+                            for (Servico s : servicos) {
+                                if (s.getEstado().equals(Estado.Pendente)) {
+                                    totServicosPendentes++;
                                     horasServico += s.getTipo().getTempoDuracao();
                                     waypoints.add(new LatLng(s.getCoordenadas().getLatitude(), s.getCoordenadas().getLongitude()));
-                                }else if(s.getEstado().equals(Estado.Concluido)){
+                                } else if (s.getEstado().equals(Estado.Concluido)) {
                                     horasServico += s.getTipo().getTempoDuracao();
                                     waypoints.add(new LatLng(s.getCoordenadas().getLatitude(), s.getCoordenadas().getLongitude()));
                                 }
                             }
 
-                            if(!waypoints.isEmpty()){
+                            if (!waypoints.isEmpty()) {
                                 String url = Utils.getUrl(pontoInicial.getPosition(), pontoFinal.getPosition(), waypoints, "driving", getActivity());
                                 Utils.getDistancesTime(url, getActivity(), new SimpleCallback() {
                                     @Override
                                     public void callback(Object data) {
-                                        totTime = (Integer)data;
-                                        totTime = totTime/60;
+                                        totTime = (Integer) data;
+                                        totTime = totTime / 60;
 
                                         horasServico += totTime;
-                                        horasServico = horasServico/60;
+                                        horasServico = horasServico / 60;
 
-                                        if(totServicosPendentes <= 3 && horasServico <= 7){
+                                        if (totServicosPendentes <= 3 && horasServico <= 7) {
                                             availableUsers.add(user.getNome());
                                         }
 
@@ -367,27 +381,27 @@ public class NewAppointment extends Fragment {
     }
 
 
-    public void orderArray(){
+    public void orderArray() {
 
 
-        String selectedMorada = (String)spinnerMoradas.getSelectedItem();
+        String selectedMorada = (String) spinnerMoradas.getSelectedItem();
         Utils.getLastLocations(availableUsers, new SimpleCallback() {
             @Override
             public void callback(Object data) {
-                Map<String,ServiceLocation> map = (Map<String,ServiceLocation>) data;
+                Map<String, ServiceLocation> map = (Map<String, ServiceLocation>) data;
                 List<ServiceLocation> locations = new ArrayList<ServiceLocation>(map.values());
                 List<String> users = new ArrayList<String>(map.keySet());
 
-                Utils.usersMapDistance(result.get(selectedMorada), locations,users,getActivity(), new SimpleCallback() {
+                Utils.usersMapDistance(result.get(selectedMorada), locations, users, getActivity(), new SimpleCallback() {
                     @Override
                     public void callback(Object data) {
-                        Map<String,Integer> userDistancias = (Map<String,Integer>) data;
-                        Map<String,Integer> orderedMap = MapUtil.sortByValue(userDistancias);
+                        Map<String, Integer> userDistancias = (Map<String, Integer>) data;
+                        Map<String, Integer> orderedMap = MapUtil.sortByValue(userDistancias);
                         availableUsers = new ArrayList<>(orderedMap.keySet());
                         Log.d("NAO ORDENADO", userDistancias.toString());
                         Log.d("ORDENADO", orderedMap.toString());
                         ArrayAdapter<String> adapterUser = new ArrayAdapter<String>(getActivity(),
-                                android.R.layout.simple_spinner_item, availableUsers);
+                                R.layout.spinner_item, availableUsers);
                         adapterUser.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                         spinnerTecnicos.setAdapter(adapterUser);
                     }
@@ -398,7 +412,16 @@ public class NewAppointment extends Fragment {
 
     }
 
-
+    private boolean loadFragment(Fragment fragment) {
+        if (fragment != null) {
+            getActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragmentContainerTec, fragment)
+                    .commit();
+            return true;
+        }
+        return false;
+    }
 
 
 }

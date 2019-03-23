@@ -1,6 +1,9 @@
 package ipvc.estg.wheretogo.Classes;
 
+import android.app.Activity;
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -48,6 +51,14 @@ public class Utils {
     public static DatabaseReference servicetypeRef = FirebaseDatabase.getInstance().getReference(Utils.servicetypeName);
 
     public static DateFormat hourFormat = new SimpleDateFormat("HH:mm:ss");
+
+
+    public static boolean isNetworkAvailable(Activity activity) {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
 
 
     public static String getUrl(LatLng origin, LatLng dest, List<LatLng> waypoints, String directionMode, Context context) {

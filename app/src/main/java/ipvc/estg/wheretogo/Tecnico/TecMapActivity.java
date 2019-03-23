@@ -7,6 +7,7 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.bottomnavigation.BottomNavigationItemView;
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -50,6 +51,7 @@ import androidx.fragment.app.Fragment;
 import ipvc.estg.wheretogo.Classes.Localizacao;
 import ipvc.estg.wheretogo.Classes.MyUser;
 import ipvc.estg.wheretogo.Classes.ServiceLocation;
+import ipvc.estg.wheretogo.Classes.Servico;
 import ipvc.estg.wheretogo.Classes.SimpleCallback;
 import ipvc.estg.wheretogo.Classes.Utils;
 import ipvc.estg.wheretogo.Login.LoginActivity;
@@ -118,7 +120,6 @@ public class TecMapActivity extends AppCompatActivity implements GoogleApiClient
                         fragment.setArguments(bundle);
                         break;
 
-                    //itemView.removeViewAt(2);
                     case R.id.navigation_map_tec:
                         fragment = new TecMapFragment();
                         break;
@@ -148,8 +149,39 @@ public class TecMapActivity extends AppCompatActivity implements GoogleApiClient
                 .inflate(R.layout.notification_badge, itemView, true);
 
         TextView textView = badge.findViewById(R.id.notifications_badge);
-        textView.setText("3");
 
+
+        LocalDateTime l = new LocalDateTime();
+        android.text.format.DateFormat df = new android.text.format.DateFormat();
+        String date = df.format("dd-MM-yyyy", l.toDate()).toString();
+
+        Query query = Utils.serviceRef
+                .orderByChild("data")
+                .equalTo(date);
+
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    int totServicos = 0;
+
+                    for (DataSnapshot d : dataSnapshot.getChildren()) {
+                        Servico service = d.getValue(Servico.class);
+
+                        if (service.getTecnico().equals(user)) {
+                            totServicos ++;
+                        }
+                    }
+
+                    textView.setText("" + totServicos);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
     }
 

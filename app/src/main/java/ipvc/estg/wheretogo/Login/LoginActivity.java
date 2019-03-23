@@ -1,5 +1,6 @@
 package ipvc.estg.wheretogo.Login;
 
+import android.app.Activity;
 import android.content.Intent;
 
 import androidx.annotation.NonNull;
@@ -41,6 +42,7 @@ import ipvc.estg.wheretogo.Classes.ServiceLocation;
 import ipvc.estg.wheretogo.Classes.Servico;
 import ipvc.estg.wheretogo.Classes.TipoServico;
 import ipvc.estg.wheretogo.Classes.TipoUser;
+import ipvc.estg.wheretogo.Classes.Utils;
 import ipvc.estg.wheretogo.R;
 import ipvc.estg.wheretogo.Tecnico.TecMapActivity;
 
@@ -55,6 +57,8 @@ public class LoginActivity extends AppCompatActivity {
     public static String user;
     public static MarkerOptions pontoInicial = new MarkerOptions().position(new LatLng(41.702133, -8.848484)).title("Ponto Inicial");
     public static MarkerOptions pontoFinal = new MarkerOptions().position(new LatLng(41.702133, -8.848484)).title("Ponto Final");
+    Activity activity;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +66,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
 
+        activity = this;
         FirebaseDatabase.getInstance().getReference().keepSynced(true);
 
         refUsers = FirebaseDatabase.getInstance().getReference("users");
@@ -87,14 +92,18 @@ public class LoginActivity extends AppCompatActivity {
 
 
 
-        btnLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (email.getText().length() != 0 && password.getText().length() != 0) {
+        btnLogin.setOnClickListener(v -> {
+
+            if (email.getText().length() != 0 && password.getText().length() != 0) {
+
+                if (!Utils.isNetworkAvailable(activity)){
+                    Toast.makeText(activity, "SEM INTERNET", Toast.LENGTH_SHORT).show();
+                }else {
                     loginUser(email.getText().toString(), password.getText().toString());
                 }
 
             }
+
         });
 
 

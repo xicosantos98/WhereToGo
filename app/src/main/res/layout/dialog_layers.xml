@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="300dp"
+    android:layout_height="200dp"
+    android:background="@drawable/dialog_background">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true">
+
+        <ImageButton
+            android:id="@+id/map_type_default"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:background="@drawable/default_view"
+            />
+
+        <ImageButton
+            android:id="@+id/map_type_satellite"
+            android:layout_toRightOf="@id/map_type_default"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/sattelite_view" />
+
+        <ImageButton
+            android:id="@+id/map_type_terrain"
+            android:layout_toRightOf="@id/map_type_satellite"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/terrain_view" />
+
+    </RelativeLayout>
+
+
+
+
+</RelativeLayout>

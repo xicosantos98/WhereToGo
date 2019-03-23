@@ -21,4 +21,8 @@
     <string name="str_confirm">Confirmar</string>
     <string name="str_api_geo">AIzaSyD3MzrBu4w8kXQ318h8g_UC1qTrRO8EXKI</string>
     <string name="str_new_service">Novo serviço</string>
+    <string name="str_tlm">Número de telemóvel</string>
+    <string name="str_watch_list">Ver lista</string>
+    <string name="str_notify">Técnico notificado</string>
+    <string name="str_no_appointments">Sem serviços</string>
 </resources>
