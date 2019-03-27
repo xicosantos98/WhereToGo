@@ -25,4 +25,13 @@
     <string name="str_watch_list">Ver lista</string>
     <string name="str_notify">Técnico notificado</string>
     <string name="str_no_appointments">Sem serviços</string>
+    <string name="str_map_normal">Normal</string>
+    <string name="str_map_satellite">Satélite</string>
+    <string name="str_map_terrain">Terreno</string>
+    <string name="str_traffic">Ativar tráfego</string>
+    <string name="str_done">Concluido</string>
+    <string name="str_pending">Pendente</string>
+    <string name="str_rejected">Rejeitado</string>
+    <string name="str_pending_2">Por confirmar</string>
+    <string name="str_canceled">Cancelado</string>
 </resources>

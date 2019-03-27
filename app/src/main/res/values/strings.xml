@@ -50,4 +50,13 @@
     <string name="str_watch_list">Watch List</string>
     <string name="str_notify">Technician notified</string>
     <string name="str_no_appointments">0 appointments found</string>
+    <string name="str_map_normal">Normal</string>
+    <string name="str_map_satellite">Satellite</string>
+    <string name="str_map_terrain">Terrain</string>
+    <string name="str_traffic">Enable traffic</string>
+    <string name="str_done">Done</string>
+    <string name="str_pending">Pending</string>
+    <string name="str_rejected">Rejected</string>
+    <string name="str_pending_2">Waiting approval</string>
+    <string name="str_canceled">Canceled</string>
 </resources>

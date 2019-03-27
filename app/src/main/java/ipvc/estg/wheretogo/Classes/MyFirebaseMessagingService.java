@@ -43,15 +43,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         // Check if message contains a data payload.
         if (remoteMessage.getData().size() > 0) {
-            Log.d("a", "Message data payload: " + remoteMessage.getData());
+            Log.d("a", "Message data payload: " + remoteMessage.getData().get("body"));
 
-            /*if (true) {
-                // For long-running tasks (10 seconds or more) use Firebase Job Dispatcher.
-                scheduleJob();
-            } else {
-                // Handle message within 10 seconds
-                handleNow();
-            }*/
 
         }
 
@@ -59,6 +52,12 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         // Check if message contains a notification payload.
         if (remoteMessage.getNotification() != null) {
             Log.d("TAG", "Message MyFirebaseMessagingService Body: " + remoteMessage.getNotification().getBody());
+
+            if (remoteMessage.getData().size() > 0){
+                bundleAccept.putString("ID_SERVICO", remoteMessage.getData().get("body"));
+                bundleDeny.putString("ID_SERVICO", remoteMessage.getData().get("body"));
+            }
+
 
             Random rand = new Random();
             int idNotification = rand.nextInt(100);

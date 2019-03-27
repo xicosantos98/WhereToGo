@@ -1,6 +1,7 @@
 package ipvc.estg.wheretogo.Adapter;
 
 import android.app.Activity;
+import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -108,25 +109,37 @@ public class ServiceAdapterTec extends RecyclerView.Adapter<RecyclerView.ViewHol
     @Override
     public void onBindViewHolder( RecyclerView.ViewHolder holder, int position) {
         if(holder instanceof ItemViewHolderTec){
+            Resources res  = holder.itemView.getContext().getResources();
             Servico servico = servicos.get(position);
             String estado = servicos.get(position).getEstado().toString();
             ItemViewHolderTec viewHolder = (ItemViewHolderTec) holder;
-            viewHolder.estado.setText(servicos.get(position).getEstado().toString());
             viewHolder.data.setText(servicos.get(position).getData());
             viewHolder.descricao.setText(servicos.get(position).getDescricao());
             viewHolder.morada.setText(servicos.get(position).getMorada());
 
             switch (estado){
                 case "Pendente":
-                    viewHolder.color_estado.setColorFilter(a.getColor(R.color.orange)); break;
+                    viewHolder.color_estado.setImageDrawable(a.getDrawable(R.drawable.ic_pendent_accepted));
+                    viewHolder.estado.setText(res.getString(R.string.str_pending));
+                    break;
                 case "Cancelado":
-                    viewHolder.color_estado.setColorFilter(a.getColor(R.color.red)); break;
+                    viewHolder.color_estado.setImageDrawable(a.getDrawable(R.drawable.ic_cancel_service));
+                    viewHolder.estado.setText(res.getString(R.string.str_canceled));
+                    break;
                 case "Concluido":
-                    viewHolder.color_estado.setColorFilter(a.getColor(R.color.green)); break;
+                    viewHolder.color_estado.setImageDrawable(a.getDrawable(R.drawable.ic_conclued_service));
+                    viewHolder.estado.setText(res.getString(R.string.str_done));
+                    break;
                 case "Rejeitado":
-                    viewHolder.color_estado.setColorFilter(a.getColor(R.color.grey)); break;
+                    viewHolder.color_estado.setImageDrawable(a.getDrawable(R.drawable.ic_rejected_service));
+                    viewHolder.estado.setText(res.getString(R.string.str_rejected));
+                    break;
+                case "Pendente_por_aceitar":
+                    viewHolder.color_estado.setImageDrawable(a.getDrawable(R.drawable.ic_pendent_not_accepted));
+                    viewHolder.estado.setText(res.getString(R.string.str_pending_2));
+                    break;
                 default:
-                    viewHolder.color_estado.setColorFilter(a.getColor(R.color.colorPrimary)); break;
+                    break;
             }
         }else if(holder instanceof LoadingViewHolderTec){
             LoadingViewHolderTec loadingViewHolder = (LoadingViewHolderTec) holder;

@@ -38,6 +38,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -64,6 +66,8 @@ public class TecMapActivity extends AppCompatActivity implements GoogleApiClient
     Fragment fragment;
     BottomNavigationItemView itemView;
     String user, id_user;
+    RadioGroup radioGroup;
+
 
     private static final int MY_PERMISSION_REQUEST_CODE = 7192;
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 300193;
@@ -94,6 +98,7 @@ public class TecMapActivity extends AppCompatActivity implements GoogleApiClient
 
         refLocation = FirebaseDatabase.getInstance().getReference("localizacao");
         refUsers = FirebaseDatabase.getInstance().getReference("users");
+
 
 
         Intent i = getIntent();
@@ -162,8 +167,8 @@ public class TecMapActivity extends AppCompatActivity implements GoogleApiClient
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                int totServicos = 0;
                 if (dataSnapshot.exists()) {
-                    int totServicos = 0;
 
                     for (DataSnapshot d : dataSnapshot.getChildren()) {
                         Servico service = d.getValue(Servico.class);
@@ -172,9 +177,9 @@ public class TecMapActivity extends AppCompatActivity implements GoogleApiClient
                             totServicos ++;
                         }
                     }
-
-                    textView.setText("" + totServicos);
                 }
+
+                textView.setText("" + totServicos);
             }
 
             @Override
@@ -182,6 +187,8 @@ public class TecMapActivity extends AppCompatActivity implements GoogleApiClient
 
             }
         });
+
+
 
     }
 
@@ -297,7 +304,7 @@ public class TecMapActivity extends AppCompatActivity implements GoogleApiClient
                 }
             });
 
-            Toast.makeText(this, "Latitude: " + latitude + " Longitude: " +longitude, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "Latitude: " + latitude + " Longitude: " +longitude, Toast.LENGTH_SHORT).show();
             this.latitude = latitude;
             this.longitude = longitude;
 
@@ -371,5 +378,15 @@ public class TecMapActivity extends AppCompatActivity implements GoogleApiClient
         displayLocation();
     }
 
+    @Override
+    protected void onStop() {
+        FirebaseAuth.getInstance().signOut();
+        super.onStop();
+    }
 
+    @Override
+    protected void onDestroy() {
+        FirebaseAuth.getInstance().signOut();
+        super.onDestroy();
+    }
 }

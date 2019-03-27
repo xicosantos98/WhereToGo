@@ -15,6 +15,13 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.List;
+import java.util.Map;
+
+import ipvc.estg.wheretogo.Classes.MyUser;
+import ipvc.estg.wheretogo.Classes.ServiceLocation;
+import ipvc.estg.wheretogo.Classes.SimpleCallback;
+import ipvc.estg.wheretogo.Classes.Utils;
 import ipvc.estg.wheretogo.R;
 
 public class MapFragment extends Fragment {
@@ -53,10 +60,37 @@ public class MapFragment extends Fragment {
                         .zoom(18)
                         .build();
                 map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                createMarkers();
             }
         });
 
         return v;
+    }
+
+
+    public void createMarkers(){
+        Utils.getAllTecnicosNome(new SimpleCallback() {
+            @Override
+            public void callback(Object data) {
+                List<String> tecnicos = (List<String>) data;
+
+                Utils.getLastLocations(tecnicos, new SimpleCallback() {
+                    @Override
+                    public void callback(Object data) {
+                        Map<String, ServiceLocation> hashmap = (Map<String, ServiceLocation>)data;
+                        map.clear();
+                        for(Map.Entry<String, ServiceLocation> entry : hashmap.entrySet()){
+                            String user = entry.getKey();
+                            ServiceLocation sl = entry.getValue();
+
+                            map.addMarker(new MarkerOptions().position(new LatLng(sl.getLatitude(),sl.getLongitude())).title(user));
+                        }
+                    }
+                });
+
+            }
+
+        });
     }
 
     @Override

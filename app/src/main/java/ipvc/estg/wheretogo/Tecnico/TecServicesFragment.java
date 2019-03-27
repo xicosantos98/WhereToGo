@@ -89,7 +89,7 @@ public class TecServicesFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                //servicoList.clear();
+                servicoList.clear();
 
                 if(dataSnapshot.exists()){
 

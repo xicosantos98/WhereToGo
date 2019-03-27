@@ -21,6 +21,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -96,10 +100,16 @@ public class TecMapFragment extends Fragment implements OnMapReadyCallback {
     DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
     private String user;
     private DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("users");
+    RadioGroup radioGroup;
+    CheckBox check_traffic;
+
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_tec_map, container, false);
+
 
         orderedWaypoints = new ArrayList<>();
         parser = new DataParser();
@@ -149,10 +159,49 @@ public class TecMapFragment extends Fragment implements OnMapReadyCallback {
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getActivity(), "CARREGUEI", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(), "CARREGUEI", Toast.LENGTH_SHORT).show();
                 dialog.show();
             }
         });
+
+
+        radioGroup = dialog.findViewById(R.id.radio_group_map);
+        check_traffic = dialog.findViewById(R.id.traffic_checkbox);
+
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                RadioButton checkedRadioButton = (RadioButton) group.findViewById(checkedId);
+
+                boolean isChecked = checkedRadioButton.isChecked();
+
+                if (isChecked) {
+                    //Toast.makeText(getActivity(), R.string.str_circle, Toast.LENGTH_SHORT).show();
+                    String selected = checkedRadioButton.getText().toString();
+
+                    if (selected.equals(getString(R.string.str_map_normal))){
+                        map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                        //dialog.dismiss();
+                    }else if(selected.equals(getString(R.string.str_map_satellite))){
+                        map.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+                        //dialog.dismiss();
+                    }else if(selected.equals(getString(R.string.str_map_terrain))){
+                        map.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+                        //dialog.dismiss();
+                    }
+
+                }
+            }
+        });
+
+        check_traffic.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                map.setTrafficEnabled(isChecked);
+            }
+        });
+
 
         return v;
     }

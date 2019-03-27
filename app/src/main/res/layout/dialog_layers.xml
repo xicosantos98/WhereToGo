@@ -5,6 +5,7 @@
     android:background="@drawable/dialog_background">
 
     <RelativeLayout
+        android:id="@+id/images_map"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true">
@@ -13,15 +14,14 @@
             android:id="@+id/map_type_default"
             android:layout_width="70dp"
             android:layout_height="70dp"
-            android:background="@drawable/default_view"
-            />
+            android:background="@drawable/default_view" />
 
         <ImageButton
             android:id="@+id/map_type_satellite"
             android:layout_toRightOf="@id/map_type_default"
             android:layout_width="70dp"
             android:layout_height="70dp"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="20dp"
             android:background="@drawable/sattelite_view" />
 
         <ImageButton
@@ -29,8 +29,65 @@
             android:layout_toRightOf="@id/map_type_satellite"
             android:layout_width="70dp"
             android:layout_height="70dp"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="20dp"
             android:background="@drawable/terrain_view" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/radioGroup_maps"
+        android:layout_below="@id/images_map"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="5dp">
+
+        <RadioGroup
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:id="@+id/radio_group_map">
+
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/normal_view"
+                    android:text="@string/str_map_normal"
+                    android:checked="true"/>
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:id="@+id/satellite_view"
+                    android:text="@string/str_map_satellite" />
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:id="@+id/terrain_view"
+                    android:text="@string/str_map_terrain" />
+
+        </RadioGroup>
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_below="@id/radioGroup_maps"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp">
+
+        <CheckBox
+            android:id="@+id/traffic_checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ver transito"/>
+
 
     </RelativeLayout>
 

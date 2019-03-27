@@ -120,7 +120,7 @@
                         android:id="@+id/service_card_status_tec"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="3.5dp"
+                        android:layout_marginTop="10dp"
                         android:layout_below="@id/estado_color_tec"
                         android:backgroundTint="@color/colorPrimary"
                         android:text="status" />
@@ -131,8 +131,7 @@
                         android:layout_height="35dp"
                         android:layout_marginTop="5dp"
                         android:layout_centerInParent="true"
-                        android:src="@drawable/ic_fiber_manual_record_black_24dp"
-                        android:tint="@color/colorPrimary" />
+                        android:src="@drawable/ic_fiber_manual_record_black_24dp" />
 
                 </RelativeLayout>
 

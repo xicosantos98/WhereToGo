@@ -119,7 +119,7 @@ public class Utils {
         Query query = serviceRef.orderByChild("data").equalTo(date);
 
 
-        query.addValueEventListener(new ValueEventListener() {
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 int numServicos = 0;
@@ -149,7 +149,7 @@ public class Utils {
 
         final List<MyUser> tecnicos = new ArrayList<>();
 
-        usersRef.addValueEventListener(new ValueEventListener() {
+        usersRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
@@ -171,6 +171,35 @@ public class Utils {
         });
     }
 
+
+    public static void getAllTecnicosNome(final SimpleCallback simpleCallback) {
+
+        final List<String> tecnicos = new ArrayList<>();
+
+        usersRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                for (DataSnapshot d : dataSnapshot.getChildren()) {
+                    MyUser user = d.getValue(MyUser.class);
+
+                    if (user.getTipo().equals(TipoUser.Tecnico)) {
+                        tecnicos.add(user.getNome());
+                    }
+                }
+
+                simpleCallback.callback(tecnicos);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+
+
     public static void getAllServices(final MyUser user, final SimpleCallback simpleCallback) {
         LocalDateTime l = new LocalDateTime().minusDays(5);
         android.text.format.DateFormat df = new android.text.format.DateFormat();
@@ -180,7 +209,7 @@ public class Utils {
         Query query = serviceRef.orderByChild("data").equalTo(date);
 
 
-        query.addValueEventListener(new ValueEventListener() {
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 List<Servico> servicos = new ArrayList<>();
@@ -207,7 +236,7 @@ public class Utils {
 
         Query query = usersRef.orderByChild("id");
 
-        query.addValueEventListener(new ValueEventListener() {
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Map<String, ServiceLocation> usersLocation = new HashMap<>();
@@ -349,7 +378,7 @@ public class Utils {
         }
     }
 
-    public static void sendNotification(String morada, Context context, String id){
+    public static void sendNotification(String morada, Context context, String idUser, String idServico){
 
         String url = "https://fcm.googleapis.com/fcm/send";
 
@@ -358,13 +387,16 @@ public class Utils {
 
         JSONObject notification = new JSONObject();
         JSONObject data = new JSONObject();
+        JSONObject body = new JSONObject();
         try {
             data.put("body", morada);
             data.put("title", "Novo Serviço");
+            body.put("body", idServico);
             JSONArray jsonArray = new JSONArray();
-            jsonArray.put(0, id);
+            jsonArray.put(0, idUser);
             jsonParams.put("registration_ids",jsonArray);
             jsonParams.put("notification",data);
+            jsonParams.put("data", body);
         } catch (JSONException e) {
             e.printStackTrace();
         }

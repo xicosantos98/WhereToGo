@@ -49,4 +49,9 @@ public class MyUser {
     public ServiceLocation getLocation() {
         return location;
     }
+
+    @Override
+    public String toString() {
+        return nome;
+    }
 }

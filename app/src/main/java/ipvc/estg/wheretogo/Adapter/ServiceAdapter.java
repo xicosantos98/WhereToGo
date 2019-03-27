@@ -41,7 +41,7 @@ class ItemViewHolder extends RecyclerView.ViewHolder{
         data = itemView.findViewById(R.id.service_card_date);
         descricao = itemView.findViewById(R.id.service_card_description);
         tecnico = itemView.findViewById(R.id.service_card_technician);
-        estado = itemView.findViewById(R.id.service_card_status);
+        //estado = itemView.findViewById(R.id.service_card_status);
         color_estado = itemView.findViewById(R.id.estado_color);
     }
 }
@@ -117,7 +117,7 @@ public class ServiceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             Servico servico = servicos.get(position);
             String estado = servicos.get(position).getEstado().toString();
             ItemViewHolder viewHolder = (ItemViewHolder) holder;
-            viewHolder.estado.setText(servicos.get(position).getEstado().toString());
+            //viewHolder.estado.setText(servicos.get(position).getEstado().toString());
             viewHolder.tecnico.setText(servicos.get(position).getTecnico());
             viewHolder.data.setText(servicos.get(position).getData());
             viewHolder.descricao.setText(servicos.get(position).getDescricao());
@@ -125,15 +125,17 @@ public class ServiceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
             switch (estado){
                 case "Pendente":
-                    viewHolder.color_estado.setColorFilter(a.getColor(R.color.orange)); break;
+                    viewHolder.color_estado.setImageDrawable(a.getDrawable(R.drawable.ic_pendent_accepted)); break;
                 case "Cancelado":
-                    viewHolder.color_estado.setColorFilter(a.getColor(R.color.red)); break;
+                    viewHolder.color_estado.setImageDrawable(a.getDrawable(R.drawable.ic_cancel_service)); break;
                 case "Concluido":
-                    viewHolder.color_estado.setColorFilter(a.getColor(R.color.green)); break;
+                    viewHolder.color_estado.setImageDrawable(a.getDrawable(R.drawable.ic_conclued_service)); break;
                 case "Rejeitado":
-                    viewHolder.color_estado.setColorFilter(a.getColor(R.color.grey)); break;
+                    viewHolder.color_estado.setImageDrawable(a.getDrawable(R.drawable.ic_rejected_service)); break;
+                case "Pendente_por_aceitar":
+                    viewHolder.color_estado.setImageDrawable(a.getDrawable(R.drawable.ic_pendent_not_accepted));break;
                 default:
-                    viewHolder.color_estado.setColorFilter(a.getColor(R.color.colorPrimary)); break;
+                    break;
             }
         }else if(holder instanceof LoadingViewHolder){
             LoadingViewHolder loadingViewHolder = (LoadingViewHolder) holder;

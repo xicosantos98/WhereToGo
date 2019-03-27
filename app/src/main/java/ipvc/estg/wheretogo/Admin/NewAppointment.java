@@ -72,7 +72,7 @@ public class NewAppointment extends Fragment {
 
     Button btnSearch, btnErase, btnConfirm;
     EditText address;
-    EditText description;
+    EditText description, tlm;
     HashMap<String, JSONObject> result;
     Spinner spinnerMoradas, spinnerTipo, spinnerTecnicos;
     DatabaseReference tipos = FirebaseDatabase.getInstance().getReference("tipo_servico");
@@ -119,6 +119,8 @@ public class NewAppointment extends Fragment {
         description.setImeOptions(EditorInfo.IME_ACTION_DONE);
         description.setRawInputType(InputType.TYPE_CLASS_TEXT);
 
+        tlm = v.findViewById(R.id.text_tlm);
+
         service = v.findViewById(R.id.linear_hide);
         buttons = v.findViewById(R.id.linear_buttons);
 
@@ -127,13 +129,14 @@ public class NewAppointment extends Fragment {
         spinnerTecnicos = (Spinner) v.findViewById(R.id.spinner_tecnico);
 
         address.setText("Rua Manuel Espregueira");
-        setAvailableUsers();
+
 
 
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 createRequest(address.getText().toString());
+                setAvailableUsers();
                 InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
                 spinnerMoradas.requestFocus();
@@ -152,7 +155,9 @@ public class NewAppointment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                JSONObject serviceLocation = result.get(spinnerMoradas.getSelectedItem().toString());
+                String morada = spinnerMoradas.getSelectedItem().toString();
+
+                JSONObject serviceLocation = result.get(morada);
                 try {
 
                     Double latitude = (serviceLocation.getDouble("lat"));
@@ -162,13 +167,13 @@ public class NewAppointment extends Fragment {
                     DateFormat df = new DateFormat();
                     String date = df.format("dd-MM-yyyy", l.toDate()).toString();
 
-                    /*String id = servicos.push().getKey();
-                    Servico s = new Servico(id, spinnerMoradas.getSelectedItem().toString(), description.getText().toString(), Estado.Pendente,
+                    String id = servicos.push().getKey();
+                    Servico s = new Servico(id, morada, description.getText().toString(), Estado.Pendente_por_aceitar,
                             new ServiceLocation(latitude, longitude), tiposList.get(spinnerTipo.getSelectedItem().toString()),
-                            "32323332", date,
+                            tlm.getText().toString(), date,
                             spinnerTecnicos.getSelectedItem().toString());
 
-                    servicos.child(id).setValue(s);*/
+                    servicos.child(id).setValue(s);
 
                     Query queryUser = usersRef.orderByChild("nome").equalTo(spinnerTecnicos.getSelectedItem().toString());
 
@@ -179,7 +184,7 @@ public class NewAppointment extends Fragment {
                             for (DataSnapshot d : dataSnapshot.getChildren()) {
                                 u = d.getValue(MyUser.class);
                             }
-                            //Utils.sendNotification(spinnerMoradas.getSelectedItem().toString(), getActivity(), u.getToken());
+                            Utils.sendNotification(morada, getActivity(), u.getToken(), id);
 
                             Snackbar
                                     .make(getView(), getResources().getString(R.string.str_notify),
@@ -299,7 +304,6 @@ public class NewAppointment extends Fragment {
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                         spinnerMoradas.setAdapter(adapter);
                         spinnerMoradas.setOnItemSelectedListener(new MyOnItemSelectedListener());
-                        spinnerMoradas.setSelection(0);
 
                     }
                 }, new Response.ErrorListener() {

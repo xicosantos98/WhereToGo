@@ -92,4 +92,17 @@ public class AdminMapActivity extends AppCompatActivity {
         }
         return false;
     }
+
+    @Override
+    protected void onStop() {
+        FirebaseAuth.getInstance().signOut();
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        FirebaseAuth.getInstance().signOut();
+        super.onDestroy();
+    }
 }
+
