@@ -34,4 +34,6 @@
     <string name="str_rejected">Rejeitado</string>
     <string name="str_pending_2">Por confirmar</string>
     <string name="str_canceled">Cancelado</string>
+    <string name="str_accept">Aceitar</string>
+    <string name="str_refuse">Recusar</string>
 </resources>

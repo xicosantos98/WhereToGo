@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -35,9 +36,6 @@ import ipvc.estg.wheretogo.Classes.ILoadMore;
 import ipvc.estg.wheretogo.Classes.Servico;
 import ipvc.estg.wheretogo.R;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class TecServicesFragment extends Fragment {
 
 
@@ -76,7 +74,6 @@ public class TecServicesFragment extends Fragment {
     }
 
     public void initializeArray (){
-        //SimpleDateFormat fmt = new SimpleDateFormat("dd-MM-yyyy");
 
         LocalDateTime l = new LocalDateTime();
         DateFormat df = new DateFormat();
@@ -102,6 +99,8 @@ public class TecServicesFragment extends Fragment {
                     serviceAdapter = new ServiceAdapterTec(recycler, getActivity(), servicoList);
 
                     recycler.setAdapter(serviceAdapter);
+
+                    error.setVisibility(View.INVISIBLE);
 
                 }
 

@@ -28,14 +28,14 @@
 
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="2"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
                 android:orientation="vertical">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="3">
+                    android:layout_weight="2">
 
 
                     <ImageView
@@ -91,7 +91,80 @@
                         android:layout_toRightOf="@id/icon_desc"
                         android:textSize="12dp"
                         android:paddingRight="10dp"
+                        android:layout_marginBottom="10dp"
                         android:text="skahjdkshjkddasjndm,asnm,dasnm,dnmadnsma,ndms,anmds,ams,namadksakndsaknnjdsnakjnjjknjdsa" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/service_card_accept_tec"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:layout_gravity="center"
+                        android:visibility="invisible"
+                        android:textSize="12dp"
+                        android:includeFontPadding="false"
+                        android:text="@string/str_accept"
+                        android:layout_below="@id/service_card_description_tec"
+                        android:textAllCaps="false"
+                        app:icon="@drawable/ic_check_black_24dp"
+                        android:layout_marginRight="5dp"
+                        app:iconSize="12dp"
+                        android:fontFamily="sans-serif"
+                        app:strokeColor="@color/colorPrimary" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/service_card_refuse_tec"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:layout_gravity="center"
+                        android:textSize="12dp"
+                        android:layout_below="@id/service_card_description_tec"
+                        android:layout_toRightOf="@id/service_card_accept_tec"
+                        android:includeFontPadding="false"
+                        android:visibility="invisible"
+                        android:text="@string/str_refuse"
+                        android:textAllCaps="false"
+                        app:icon="@drawable/ic_cancel"
+                        app:iconSize="12dp"
+                        android:fontFamily="sans-serif"
+                        app:strokeColor="@color/colorPrimary" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/service_card_done_tec"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="wrap_content"
+                        android:visibility="invisible"
+                        android:layout_height="40dp"
+                        android:layout_gravity="center"
+                        android:textSize="12dp"
+                        android:includeFontPadding="false"
+                        android:text="@string/str_done"
+                        android:layout_below="@id/service_card_description_tec"
+                        android:textAllCaps="false"
+                        app:icon="@drawable/ic_check_black_24dp"
+                        android:layout_marginRight="5dp"
+                        app:iconSize="12dp"
+                        android:fontFamily="sans-serif"
+                        app:strokeColor="@color/colorPrimary" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/service_card_cancel_tec"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="wrap_content"
+                        android:visibility="invisible"
+                        android:layout_height="40dp"
+                        android:layout_gravity="center"
+                        android:textSize="12dp"
+                        android:layout_below="@id/service_card_description_tec"
+                        android:layout_toRightOf="@id/service_card_done_tec"
+                        android:includeFontPadding="false"
+                        android:text="@string/str_cancel"
+                        android:textAllCaps="false"
+                        app:icon="@drawable/ic_cancel"
+                        app:iconSize="12dp"
+                        android:fontFamily="sans-serif"
+                        app:strokeColor="@color/colorPrimary" />
 
 
                 </RelativeLayout>
@@ -102,7 +175,7 @@
             <LinearLayout
                 android:id="@+id/service_card_linearright"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:layout_alignParentRight="true"
                 android:orientation="vertical">
@@ -113,52 +186,29 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/service_card_technician"
-                    android:layout_gravity="center">
+                    android:layout_marginTop="5dp"
+                    android:layout_gravity="center_horizontal">
 
 
                     <TextView
                         android:id="@+id/service_card_status_tec"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="30dp"
                         android:layout_below="@id/estado_color_tec"
                         android:backgroundTint="@color/colorPrimary"
+                        android:textAlignment="center"
                         android:text="status" />
 
                     <ImageView
                         android:id="@+id/estado_color_tec"
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
                         android:layout_marginTop="5dp"
                         android:layout_centerInParent="true"
-                        android:src="@drawable/ic_fiber_manual_record_black_24dp" />
+                        android:src="@drawable/ic_pendent_accepted" />
 
                 </RelativeLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:orientation="vertical">
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/service_card_edit_tec"
-                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="40dp"
-                        android:layout_gravity="center"
-                        android:textSize="12dp"
-                        android:layout_alignParentBottom="true"
-                        android:layout_toRightOf="@id/service_card_realocate"
-                        android:includeFontPadding="false"
-                        android:text="@string/str_edit"
-                        android:textAllCaps="false"
-                        app:icon="@drawable/ic_edit"
-                        app:iconSize="12dp"
-                        android:fontFamily="sans-serif"
-                        app:strokeColor="@color/colorPrimary" />
-
-                </LinearLayout>
 
 
             </LinearLayout>
