@@ -38,4 +38,9 @@
     <string name="str_refuse">Recusar</string>
     <string name="str_end_rout">Fim da rota</string>
     <string name="str_begin_rout">Inicio da rota</string>
+    <string name="str_choose_tec">Escolha um novo técnico</string>
+    <string name="str_message_rejected"> rejeitou o serviço</string>
+    <string name="str_message_canceled"> cancelou o serviço</string>
+    <string name="str_title_rejected">Serviço rejeitado</string>
+    <string name="str_title_canceled">Serviço cancelado</string>
 </resources>

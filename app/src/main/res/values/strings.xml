@@ -63,4 +63,9 @@
     <string name="str_refuse">Refuse</string>
     <string name="str_end_rout">End of route</string>
     <string name="str_begin_rout">Begin of route</string>
+    <string name="str_choose_tec">Choose new technician</string>
+    <string name="str_message_rejected"> rejected appointment</string>
+    <string name="str_message_canceled"> canceled appointment</string>
+    <string name="str_title_rejected">Appointment rejected</string>
+    <string name="str_title_canceled">Appointment canceled</string>
 </resources>

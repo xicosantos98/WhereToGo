@@ -14,6 +14,7 @@ import android.provider.Settings;
 import androidx.core.app.NotificationCompat;
 import android.util.Log;
 
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -76,14 +77,23 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             Intent activityIntent = new Intent(getApplicationContext(), MyFirebaseMessagingService.class);
             PendingIntent contentIntent = PendingIntent.getActivity(this, 0, activityIntent, 0);
 
-            Intent broadcastIntentAcept = new Intent(this, NotificationReceiver.class);
-            broadcastIntentAcept.putExtras(bundleAccept);
-            PendingIntent actionIntentAcept = PendingIntent.getBroadcast(this, 0, broadcastIntentAcept, PendingIntent.FLAG_CANCEL_CURRENT);
+
+            if(remoteMessage.getData().get("key_1") != null){
+
+                Intent broadcastIntentAcept = new Intent(this, NotificationReceiver.class);
+                broadcastIntentAcept.putExtras(bundleAccept);
+                PendingIntent actionIntentAcept = PendingIntent.getBroadcast(this, 0, broadcastIntentAcept, PendingIntent.FLAG_CANCEL_CURRENT);
 
 
-            Intent broadcastIntentDeny = new Intent(this, NotificationReceiver.class);
-            broadcastIntentDeny.putExtras(bundleDeny);
-            PendingIntent actionIntentDeny = PendingIntent.getBroadcast(this, 1, broadcastIntentDeny, PendingIntent.FLAG_CANCEL_CURRENT);
+                Intent broadcastIntentDeny = new Intent(this, NotificationReceiver.class);
+                broadcastIntentDeny.putExtras(bundleDeny);
+                PendingIntent actionIntentDeny = PendingIntent.getBroadcast(this, 1, broadcastIntentDeny, PendingIntent.FLAG_CANCEL_CURRENT);
+
+                mBuilder.addAction(R.drawable.ic_check_black_24dp, "Aceitar", actionIntentAcept);
+                mBuilder.addAction(R.drawable.ic_cancel_black_24dp, "Recusar", actionIntentDeny);
+
+            }
+
 
 
 
@@ -91,6 +101,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
             mBuilder.setContentIntent(pendingIntent);
             mBuilder.setSmallIcon(R.drawable.ic_place_black_24dp);
+            mBuilder.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_place_black_24dp));
             mBuilder.setBadgeIconType(NotificationCompat.BADGE_ICON_LARGE);
             mBuilder.setColor(getResources().getColor(R.color.colorNotification));
             mBuilder.setSound(Settings.System.DEFAULT_RINGTONE_URI);
@@ -100,9 +111,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             mBuilder.setAutoCancel(true);
             mBuilder.setLargeIcon(BitmapFactory.decodeResource(this.getResources(), R.drawable.ic_place_black_24dp));
             mBuilder.setPriority(Notification.PRIORITY_MAX);
-            mBuilder.addAction(R.drawable.ic_check_black_24dp, "Aceitar", actionIntentAcept);
-            mBuilder.addAction(R.drawable.ic_cancel_black_24dp, "Recusar", actionIntentDeny);
 
+            //mBuilder.setStyle(new NotificationCompat.BigPictureStyle().bigLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_place_black_24dp)));
             /*NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
             inboxStyle.setBigContentTitle("Event tracker details:");
             inboxStyle.addLine("Nova linha");

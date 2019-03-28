@@ -103,6 +103,7 @@
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/service_card_realocate"
+                        android:visibility="invisible"
                         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                         android:layout_width="0dp"
                         android:layout_height="40dp"
@@ -120,18 +121,19 @@
                         app:strokeColor="@color/colorPrimary" />
 
                     <com.google.android.material.button.MaterialButton
-                        android:id="@+id/service_card_edit"
+                        android:id="@+id/service_card_cancel"
                         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                         android:layout_width="0dp"
+                        android:visibility="invisible"
                         android:layout_height="40dp"
                         android:layout_weight="1"
                         android:textSize="12dp"
                         android:layout_alignParentBottom="true"
                         android:layout_toRightOf="@id/service_card_realocate"
                         android:includeFontPadding="false"
-                        android:text="@string/str_edit"
+                        android:text="@string/str_cancel"
                         android:textAllCaps="false"
-                        app:icon="@drawable/ic_edit"
+                        app:icon="@drawable/ic_cancel"
                         app:iconSize="12dp"
                         android:fontFamily="sans-serif"
                         app:strokeColor="@color/colorPrimary" />
@@ -164,6 +166,7 @@
                     android:layout_marginTop="5dp"
                     android:text="José Alberto Tone Ribeiro"
                     android:textAlignment="center" />
+
 
                 <RelativeLayout
                     android:layout_width="wrap_content"

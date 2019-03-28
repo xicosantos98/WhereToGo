@@ -20,26 +20,28 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import ipvc.estg.wheretogo.Classes.Estado;
 import ipvc.estg.wheretogo.Classes.ILoadMore;
+import ipvc.estg.wheretogo.Classes.MyUser;
 import ipvc.estg.wheretogo.Classes.Servico;
+import ipvc.estg.wheretogo.Classes.SimpleCallback;
 import ipvc.estg.wheretogo.Classes.Utils;
 import ipvc.estg.wheretogo.R;
 
 
-class LoadingViewHolderTec extends RecyclerView.ViewHolder{
+class LoadingViewHolderTec extends RecyclerView.ViewHolder {
     public ProgressBar progressBar;
 
-    public LoadingViewHolderTec(View itemView){
+    public LoadingViewHolderTec(View itemView) {
         super(itemView);
         progressBar = itemView.findViewById(R.id.progress_bar_items_tec);
     }
 }
 
-class ItemViewHolderTec extends RecyclerView.ViewHolder{
+class ItemViewHolderTec extends RecyclerView.ViewHolder {
     public TextView morada, data, descricao, tecnico, estado;
     public ImageView color_estado;
     public Button b_accept, b_refuse, b_done, b_cancel;
 
-    public ItemViewHolderTec (View itemView){
+    public ItemViewHolderTec(View itemView) {
         super(itemView);
         morada = itemView.findViewById(R.id.service_card_address_tec);
         data = itemView.findViewById(R.id.service_card_date_tec);
@@ -53,7 +55,7 @@ class ItemViewHolderTec extends RecyclerView.ViewHolder{
     }
 }
 
-public class ServiceAdapterTec extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+public class ServiceAdapterTec extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private final int VIEW_TYPE_ITEM = 0, VIEW_TYPE_LOADING = 1;
 
@@ -61,7 +63,7 @@ public class ServiceAdapterTec extends RecyclerView.Adapter<RecyclerView.ViewHol
     boolean isLoading;
     Activity activity;
     List<Servico> servicos;
-    int visibleThreshold=20;
+    int visibleThreshold = 20;
     int lastVisibleServico, totalServicoCount;
 
     Activity a;
@@ -80,8 +82,8 @@ public class ServiceAdapterTec extends RecyclerView.Adapter<RecyclerView.ViewHol
                 super.onScrolled(recyclerView, dx, dy);
                 totalServicoCount = linearLayoutManager.getItemCount();
                 lastVisibleServico = linearLayoutManager.findLastVisibleItemPosition();
-                if(!isLoading && totalServicoCount <= (lastVisibleServico+visibleThreshold)){
-                    if(loadMore!=null)
+                if (!isLoading && totalServicoCount <= (lastVisibleServico + visibleThreshold)) {
+                    if (loadMore != null)
                         loadMore.onLoadMore();
                 }
                 isLoading = true;
@@ -93,7 +95,7 @@ public class ServiceAdapterTec extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     @Override
     public int getItemViewType(int position) {
-        return servicos.get(position) == null ? VIEW_TYPE_LOADING: VIEW_TYPE_ITEM;
+        return servicos.get(position) == null ? VIEW_TYPE_LOADING : VIEW_TYPE_ITEM;
     }
 
     public void setLoadMore(ILoadMore loadMore) {
@@ -102,11 +104,11 @@ public class ServiceAdapterTec extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if(viewType == VIEW_TYPE_ITEM){
+        if (viewType == VIEW_TYPE_ITEM) {
             View view = LayoutInflater.from(activity)
                     .inflate(R.layout.layout_appointment_list_tec, parent, false);
             return new ItemViewHolderTec(view);
-        }else if(viewType == VIEW_TYPE_LOADING){
+        } else if (viewType == VIEW_TYPE_LOADING) {
             View view = LayoutInflater.from(activity)
                     .inflate(R.layout.item_loading_tec, parent, false);
             return new LoadingViewHolderTec(view);
@@ -120,9 +122,9 @@ public class ServiceAdapterTec extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     @Override
-    public void onBindViewHolder( RecyclerView.ViewHolder holder, int position) {
-        if(holder instanceof ItemViewHolderTec){
-            Resources res  = holder.itemView.getContext().getResources();
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        if (holder instanceof ItemViewHolderTec) {
+            Resources res = holder.itemView.getContext().getResources();
             String id = servicos.get(position).getId();
             Servico servico = servicos.get(position);
             String estado = servicos.get(position).getEstado().toString();
@@ -142,7 +144,7 @@ public class ServiceAdapterTec extends RecyclerView.Adapter<RecyclerView.ViewHol
                     Utils.serviceRef.child(id).child("estado").setValue(Estado.Pendente);
                     NotificationManager manager = (NotificationManager) v.getContext().getSystemService(Context.NOTIFICATION_SERVICE);
                     manager.cancelAll();
-                                    }
+                }
             });
 
             viewHolder.b_refuse.setOnClickListener(new View.OnClickListener() {
@@ -154,6 +156,14 @@ public class ServiceAdapterTec extends RecyclerView.Adapter<RecyclerView.ViewHol
                     viewHolder.b_done.setVisibility(View.VISIBLE);
                     viewHolder.b_cancel.setVisibility(View.VISIBLE);
                     Utils.serviceRef.child(id).child("estado").setValue(Estado.Rejeitado);
+
+                    Utils.getAdmin(new SimpleCallback() {
+                        @Override
+                        public void callback(Object data) {
+                            MyUser admin = (MyUser) data;
+                            Utils.sendNotification(v.getContext().getString(R.string.str_title_rejected),servicos.get(position).getTecnico() + " " + v.getContext().getString(R.string.str_message_rejected), v.getContext(), admin.getToken() , id, true);
+                        }
+                    });
 
                 }
             });
@@ -180,10 +190,18 @@ public class ServiceAdapterTec extends RecyclerView.Adapter<RecyclerView.ViewHol
                     viewHolder.b_done.setVisibility(View.INVISIBLE);
                     viewHolder.b_cancel.setVisibility(View.INVISIBLE);
                     Utils.serviceRef.child(id).child("estado").setValue(Estado.Cancelado);
+
+                    Utils.getAdmin(new SimpleCallback() {
+                        @Override
+                        public void callback(Object data) {
+                            MyUser admin = (MyUser) data;
+                            Utils.sendNotification(v.getContext().getString(R.string.str_title_canceled),servicos.get(position).getTecnico() + " " + v.getContext().getString(R.string.str_message_canceled), v.getContext(), admin.getToken() , id, true);
+                        }
+                    });
                 }
             });
 
-            switch (estado){
+            switch (estado) {
                 case "Pendente":
                     viewHolder.color_estado.setImageDrawable(a.getDrawable(R.drawable.ic_pendent_accepted));
                     viewHolder.estado.setText(res.getString(R.string.str_pending));
@@ -211,7 +229,7 @@ public class ServiceAdapterTec extends RecyclerView.Adapter<RecyclerView.ViewHol
                 default:
                     break;
             }
-        }else if(holder instanceof LoadingViewHolderTec){
+        } else if (holder instanceof LoadingViewHolderTec) {
             LoadingViewHolderTec loadingViewHolder = (LoadingViewHolderTec) holder;
             loadingViewHolder.progressBar.setIndeterminate(true);
 

@@ -1,0 +1,45 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="300dp"
+    android:layout_height="290dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/dialog_background"
+    android:descendantFocusability="blocksDescendants">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/str_choose_tec"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/colorPrimary"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_marginTop="10dp" />
+
+    <NumberPicker
+        android:id="@+id/picker_tecnicos"
+        android:theme="@style/DefaultNumberPickerTheme"
+        android:layout_width="match_parent"
+        android:layout_height="160dp"
+        android:layout_marginLeft="40dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="20dp"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/reallocate_btn_dialog"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="10dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:includeFontPadding="false"
+        android:text="@string/str_confirm"
+        android:textAllCaps="false"
+        app:icon="@drawable/ic_check_black_24dp"
+        app:iconSize="12dp"
+        android:fontFamily="sans-serif"
+        app:strokeColor="@color/colorPrimary" />
+
+</RelativeLayout>

@@ -50,6 +50,7 @@ import java.util.TimerTask;
 
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+import ipvc.estg.wheretogo.Classes.Estado;
 import ipvc.estg.wheretogo.Classes.Localizacao;
 import ipvc.estg.wheretogo.Classes.MyUser;
 import ipvc.estg.wheretogo.Classes.ServiceLocation;
@@ -173,7 +174,7 @@ public class TecMapActivity extends AppCompatActivity implements GoogleApiClient
                     for (DataSnapshot d : dataSnapshot.getChildren()) {
                         Servico service = d.getValue(Servico.class);
 
-                        if (service.getTecnico().equals(user)) {
+                        if (service.getTecnico().equals(user) && (service.getEstado().equals(Estado.Pendente) || service.getEstado().equals(Estado.Concluido))) {
                             totServicos ++;
                         }
                     }

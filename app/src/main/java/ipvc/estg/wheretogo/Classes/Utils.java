@@ -110,6 +110,30 @@ public class Utils {
         });
     }
 
+
+    public static void getAdmin(final SimpleCallback simpleCallback){
+        usersRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                MyUser admin = null;
+                for (DataSnapshot d : dataSnapshot.getChildren()) {
+                    MyUser user = d.getValue(MyUser.class);
+
+                    if (user.getTipo().equals(TipoUser.Administrador)) {
+                        admin = user;
+                    }
+                }
+
+                simpleCallback.callback(admin);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
     public static void getNumServicos(final String user, final SimpleCallback finishCallback) {
         LocalDateTime l = new LocalDateTime().minusDays(3);
         android.text.format.DateFormat df = new android.text.format.DateFormat();
@@ -201,7 +225,7 @@ public class Utils {
 
 
     public static void getAllServices(final MyUser user, final SimpleCallback simpleCallback) {
-        LocalDateTime l = new LocalDateTime().minusDays(5);
+        LocalDateTime l = new LocalDateTime();
         android.text.format.DateFormat df = new android.text.format.DateFormat();
         String date = df.format("dd-MM-yyyy", l.toDate()).toString();
 
@@ -378,7 +402,7 @@ public class Utils {
         }
     }
 
-    public static void sendNotification(String morada, Context context, String idUser, String idServico){
+    public static void sendNotification(String title,String bodyText, Context context, String idUser, String idServico, boolean notificationAdmin){
 
         String url = "https://fcm.googleapis.com/fcm/send";
 
@@ -389,9 +413,14 @@ public class Utils {
         JSONObject data = new JSONObject();
         JSONObject body = new JSONObject();
         try {
-            data.put("body", morada);
-            data.put("title", "Novo Serviço");
+            data.put("body", bodyText);
+            data.put("title", title);
             body.put("body", idServico);
+
+            if(!notificationAdmin){
+                body.put("key_1", "buttons");
+            }
+
             JSONArray jsonArray = new JSONArray();
             jsonArray.put(0, idUser);
             jsonParams.put("registration_ids",jsonArray);

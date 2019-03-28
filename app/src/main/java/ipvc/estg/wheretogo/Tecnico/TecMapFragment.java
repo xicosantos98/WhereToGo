@@ -69,6 +69,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import ipvc.estg.wheretogo.Classes.Estado;
 import ipvc.estg.wheretogo.Classes.MyUser;
 import ipvc.estg.wheretogo.Classes.ServiceLocation;
 import ipvc.estg.wheretogo.Classes.Servico;
@@ -209,7 +210,7 @@ public class TecMapFragment extends Fragment implements OnMapReadyCallback {
     public void createPoints() {
         Query queryUser = usersRef.orderByChild("nome").equalTo(user);
 
-        queryUser.addValueEventListener(new ValueEventListener() {
+        queryUser.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 MyUser u = null;
@@ -322,7 +323,7 @@ public class TecMapFragment extends Fragment implements OnMapReadyCallback {
                 for (DataSnapshot d : dataSnapshot.getChildren()) {
                     Servico service = d.getValue(Servico.class);
 
-                    if (service.getTecnico().equals(user)) {
+                    if (service.getTecnico().equals(user) && (service.getEstado().equals(Estado.Pendente) || service.getEstado().equals(Estado.Concluido))) {
                         LatLng latLng = new LatLng(service.getCoordenadas().getLatitude(), service.getCoordenadas().getLongitude());
                         Log.d("TAG", "LATLNG: " + latLng.longitude);
                         waypoints.add(latLng);

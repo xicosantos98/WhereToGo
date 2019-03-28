@@ -184,7 +184,7 @@ public class NewAppointment extends Fragment {
                             for (DataSnapshot d : dataSnapshot.getChildren()) {
                                 u = d.getValue(MyUser.class);
                             }
-                            Utils.sendNotification(morada, getActivity(), u.getToken(), id);
+                            Utils.sendNotification(getString(R.string.str_new_appointment),morada, getActivity(), u.getToken(), id, false);
 
                             Snackbar
                                     .make(getView(), getResources().getString(R.string.str_notify),
@@ -376,6 +376,8 @@ public class NewAppointment extends Fragment {
                                         orderArray();
                                     }
                                 });
+                            }else{
+                                availableUsers.add(user.getNome());
                             }
                         }
                     });
