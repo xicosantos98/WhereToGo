@@ -38,6 +38,7 @@
                     android:layout_weight="2">
 
 
+
                     <ImageView
                         android:id="@+id/address_icon"
                         android:layout_width="12dp"
@@ -166,6 +167,13 @@
                         android:fontFamily="sans-serif"
                         app:strokeColor="@color/colorPrimary" />
 
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="CENA"
+                        android:layout_toRightOf="@id/icon_desc"
+                        android:layout_below="@id/service_card_description_tec" />
 
                 </RelativeLayout>
 

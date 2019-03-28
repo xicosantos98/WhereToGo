@@ -61,4 +61,6 @@
     <string name="str_canceled">Canceled</string>
     <string name="str_accept">Accept</string>
     <string name="str_refuse">Refuse</string>
+    <string name="str_end_rout">End of route</string>
+    <string name="str_begin_rout">Begin of route</string>
 </resources>
