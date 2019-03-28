@@ -59,4 +59,6 @@
     <string name="str_rejected">Rejected</string>
     <string name="str_pending_2">Waiting approval</string>
     <string name="str_canceled">Canceled</string>
+    <string name="str_end_rout">End of route</string>
+    <string name="str_begin_rout">Begin of route</string>
 </resources>

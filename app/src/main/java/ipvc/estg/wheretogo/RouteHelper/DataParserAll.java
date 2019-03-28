@@ -14,11 +14,8 @@ import java.util.List;
 
 import ipvc.estg.wheretogo.Tecnico.TecMapFragment;
 
-/**
- * Created by Vishal on 10/20/2018.
- */
+public class DataParserAll {
 
-public class DataParser {
     public List<List<HashMap<String, String>>> parse(JSONObject jObject) {
 
         List<List<HashMap<String, String>>> routes = new ArrayList<>();
@@ -30,9 +27,6 @@ public class DataParser {
             jRoutes = jObject.getJSONArray("routes");
             jOrder = jRoutes.getJSONObject(0).getJSONArray("waypoint_order");
 
-            for (int i=0; i < jOrder.length(); i++){
-                TecMapFragment.orderedWaypoints.add(jOrder.getInt(i));
-            }
             Log.d("ROUTESS", jRoutes.toString());
             /** Traversing all routes */
             for (int i = 0; i < jRoutes.length(); i++) {

@@ -10,4 +10,11 @@
     <color name="green">#2ecc71</color>
     <color name="grey">#abb7b7</color>
     <color name="mtrl_textinput_default_box_stroke_color" tools:override="true">#1081E0</color>
+    <color name="tec_azul">#2c3e50</color>
+    <color name="tec_azul2">#6bb9f0</color>
+    <color name="tec_cinzento">#bdc3c7</color>
+    <color name="tec_laranja">#e87e04</color>
+    <color name="tec_verde">#1e824c</color>
+    <color name="tec_vermelho">#d91e18</color>
+
 </resources>

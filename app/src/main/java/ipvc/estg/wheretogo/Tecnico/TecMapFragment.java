@@ -218,7 +218,7 @@ public class TecMapFragment extends Fragment implements OnMapReadyCallback {
                 }
                 pontoInicial = new MarkerOptions()
                         .position(new LatLng(u.getLocation()
-                                .getLatitude(), u.getLocation().getLongitude())).title("Início");
+                                .getLatitude(), u.getLocation().getLongitude())).title(getResources().getString(R.string.str_begin_rout));
             }
 
             @Override
@@ -227,7 +227,7 @@ public class TecMapFragment extends Fragment implements OnMapReadyCallback {
             }
         });
         //pontoInicial = new MarkerOptions().position(new LatLng(41.702133, -8.848484)).title("Location 1");
-        pontoFinal = new MarkerOptions().position(new LatLng(41.702133, -8.848484)).title("Fim de rota");
+        pontoFinal = new MarkerOptions().position(new LatLng(41.702133, -8.848484)).title(getResources().getString(R.string.str_end_rout));
 
         LocalDateTime l = new LocalDateTime();
         android.text.format.DateFormat df = new android.text.format.DateFormat();
@@ -287,6 +287,8 @@ public class TecMapFragment extends Fragment implements OnMapReadyCallback {
                         for (int i = 0; i < waypoints.size(); i++) {
                             map.addMarker(new MarkerOptions().position(waypoints.get(i)).title((orderedWaypoints.get(i) + 1) + "º Servico").icon(BitmapDescriptorFactory.fromResource(R.drawable.service_pin)));
                         }
+
+
 
                     }
                 }, new Response.ErrorListener() {
