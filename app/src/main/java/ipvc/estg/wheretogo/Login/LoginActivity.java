@@ -89,9 +89,6 @@ public class LoginActivity extends AppCompatActivity {
         LocalDateTime l = LocalDateTime.now();
 
 
-
-
-
         btnLogin.setOnClickListener(v -> {
 
             if (email.getText().length() != 0 && password.getText().length() != 0) {
@@ -106,8 +103,6 @@ public class LoginActivity extends AppCompatActivity {
 
         });
 
-
-        //createAccount("lobarinhas@ipvc.pt", "12345678");
 
     }
 
@@ -167,7 +162,7 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    public void createAccount(final String email, String password) {
+    public void createAccount(final String email, String password, String nome) {
 
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -176,7 +171,7 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             Log.d("TAG", "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            refUsers.child(user.getUid()).setValue(new MyUser(user.getUid(), "Lobarinhas", email, "968345678", TipoUser.Tecnico, "", null));
+                            refUsers.child(user.getUid()).setValue(new MyUser(user.getUid(), nome, email, "968345678", TipoUser.Tecnico, "", null));
                         } else {
                             Log.w("TAG", "createUserWithEmail:failure", task.getException());
                             Toast.makeText(LoginActivity.this, "Authentication failed.",

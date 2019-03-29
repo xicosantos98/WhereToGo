@@ -128,15 +128,12 @@ public class NewAppointment extends Fragment {
         spinnerTipo = (Spinner) v.findViewById(R.id.spinner_tipo);
         spinnerTecnicos = (Spinner) v.findViewById(R.id.spinner_tecnico);
 
-        address.setText("Rua Manuel Espregueira");
-
 
 
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 createRequest(address.getText().toString());
-                setAvailableUsers();
                 InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
                 spinnerMoradas.requestFocus();
@@ -173,7 +170,7 @@ public class NewAppointment extends Fragment {
                             tlm.getText().toString(), date,
                             spinnerTecnicos.getSelectedItem().toString());
 
-                    servicos.child(id).setValue(s);
+                    //servicos.child(id).setValue(s);
 
                     Query queryUser = usersRef.orderByChild("nome").equalTo(spinnerTecnicos.getSelectedItem().toString());
 
@@ -273,7 +270,9 @@ public class NewAppointment extends Fragment {
         public void onItemSelected(AdapterView<?> parent,
                                    View view, int pos, long id) {
             service.setVisibility(View.VISIBLE);
-            orderArray();
+            if(result != null && availableUsers.size() != 0){
+                orderArray();
+            }
             buttons.setVisibility(View.VISIBLE);
 
         }
@@ -294,6 +293,7 @@ public class NewAppointment extends Fragment {
                     @Override
                     public void onResponse(JSONObject response) {
                         AddressParser addressParser = new AddressParser();
+
                         result = addressParser.getInfo(response);
                         List<String> addresses = new ArrayList<>();
                         addresses.addAll(result.keySet());
@@ -304,6 +304,8 @@ public class NewAppointment extends Fragment {
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                         spinnerMoradas.setAdapter(adapter);
                         spinnerMoradas.setOnItemSelectedListener(new MyOnItemSelectedListener());
+
+                        setAvailableUsers();
 
                     }
                 }, new Response.ErrorListener() {
