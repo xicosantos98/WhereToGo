@@ -11,12 +11,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -54,6 +56,7 @@ public class LoginActivity extends AppCompatActivity {
     Button btnLogin;
     DatabaseReference refUsers, refLocalizacao, refTipo, refServico;
     MyUser userLogin;
+    RelativeLayout relativeLayout;
     public static String user;
     public static MarkerOptions pontoInicial = new MarkerOptions().position(new LatLng(41.702133, -8.848484)).title("Ponto Inicial");
     public static MarkerOptions pontoFinal = new MarkerOptions().position(new LatLng(41.702133, -8.848484)).title("Ponto Final");
@@ -81,6 +84,7 @@ public class LoginActivity extends AppCompatActivity {
         password = findViewById(R.id.input_password);
         btnLogin = findViewById(R.id.btnLogin);
         progressBar = findViewById(R.id.progress_bar);
+        relativeLayout = findViewById(R.id.login_layout);
 
         email.setText("franciscosantos@ipvc.pt");
         password.setText("12345678");
@@ -94,7 +98,9 @@ public class LoginActivity extends AppCompatActivity {
             if (email.getText().length() != 0 && password.getText().length() != 0) {
 
                 if (!Utils.isNetworkAvailable(activity)){
-                    Toast.makeText(activity, "SEM INTERNET", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(activity, "SEM INTERNET", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(relativeLayout.getRootView(), R.string.str_no_connection, Snackbar.LENGTH_SHORT)
+                            .show();
                 }else {
                     loginUser(email.getText().toString(), password.getText().toString());
                 }

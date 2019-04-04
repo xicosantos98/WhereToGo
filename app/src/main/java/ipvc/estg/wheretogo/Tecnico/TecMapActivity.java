@@ -11,6 +11,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.bottomnavigation.BottomNavigationItemView;
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -21,6 +22,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -40,6 +42,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -68,6 +71,7 @@ public class TecMapActivity extends AppCompatActivity implements GoogleApiClient
     BottomNavigationItemView itemView;
     String user, id_user;
     RadioGroup radioGroup;
+    RelativeLayout relativeLayout;
 
 
     private static final int MY_PERMISSION_REQUEST_CODE = 7192;
@@ -100,8 +104,9 @@ public class TecMapActivity extends AppCompatActivity implements GoogleApiClient
         refLocation = FirebaseDatabase.getInstance().getReference("localizacao");
         refUsers = FirebaseDatabase.getInstance().getReference("users");
 
+        Activity a = this;
 
-
+        relativeLayout = findViewById(R.id.layout_tec_list);
         Intent i = getIntent();
         //user = i.getStringExtra("USER");
         user = LoginActivity.user;
@@ -120,6 +125,11 @@ public class TecMapActivity extends AppCompatActivity implements GoogleApiClient
                 switch (menuItem.getItemId()) {
                     case R.id.navigation_ListAppoint_tec:
 
+                        if (!Utils.isNetworkAvailable(a)) {
+                            Snackbar.make(relativeLayout.getRootView(), R.string.str_no_connection, Snackbar.LENGTH_SHORT)
+                                    .show();
+                        }
+
                         Bundle bundle = new Bundle();
                         bundle.putString("USER", user);
                         fragment = new TecServicesFragment();
@@ -127,6 +137,12 @@ public class TecMapActivity extends AppCompatActivity implements GoogleApiClient
                         break;
 
                     case R.id.navigation_map_tec:
+
+                        if (!Utils.isNetworkAvailable(a)) {
+                            Snackbar.make(relativeLayout.getRootView(), R.string.str_no_connection, Snackbar.LENGTH_SHORT)
+                                    .show();
+                        }
+
                         fragment = new TecMapFragment();
                         break;
                     case R.id.navigation_logout_tec:
@@ -175,7 +191,7 @@ public class TecMapActivity extends AppCompatActivity implements GoogleApiClient
                         Servico service = d.getValue(Servico.class);
 
                         if (service.getTecnico().equals(user) && (service.getEstado().equals(Estado.Pendente) || service.getEstado().equals(Estado.Concluido))) {
-                            totServicos ++;
+                            totServicos++;
                         }
                     }
                 }
@@ -190,9 +206,7 @@ public class TecMapActivity extends AppCompatActivity implements GoogleApiClient
         });
 
 
-
     }
-
 
 
     public void openDialog() {
@@ -300,8 +314,8 @@ public class TecMapActivity extends AppCompatActivity implements GoogleApiClient
             Utils.getUserLogin(user, new SimpleCallback() {
                 @Override
                 public void callback(Object data) {
-                    MyUser u = (MyUser)data;
-                    refUsers.child(u.getId()).child("location").setValue(new ServiceLocation(latitude,longitude));
+                    MyUser u = (MyUser) data;
+                    refUsers.child(u.getId()).child("location").setValue(new ServiceLocation(latitude, longitude));
                 }
             });
 

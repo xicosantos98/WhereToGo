@@ -170,7 +170,7 @@ public class NewAppointment extends Fragment {
                             tlm.getText().toString(), date,
                             spinnerTecnicos.getSelectedItem().toString());
 
-                    //servicos.child(id).setValue(s);
+                    servicos.child(id).setValue(s);
 
                     Query queryUser = usersRef.orderByChild("nome").equalTo(spinnerTecnicos.getSelectedItem().toString());
 
